@@ -60,7 +60,7 @@ function cookiebarOffset(timeoutTime = 1000, pxOffset) {
         }
         //$('html').css('padding-bottom', cookiebarHeight);
         $('html').animate({ 'padding-bottom' : pxOffset }, "slow");
-        console.log('cookiebar offset van ' + pxOffset +' is gedaan na:' + timeoutTime);
+        //console.log('cookiebar offset van ' + pxOffset +' is gedaan na:' + timeoutTime);
     }, timeoutTime);
 }
 
@@ -68,7 +68,7 @@ function toggleCookieModal(){
     $('body').toggleClass("cookie-modal--open");
     if(!$('body').hasClass( "cookie-modal--open" ) && $('#cookies-allowed').attr('data-page-reload') === "true"){
         setTimeout(function(){
-            console.log('RELOAD!');
+            //console.log('RELOAD!');
             location.reload();
         }, 600);
     }
@@ -80,12 +80,12 @@ var handleCookieScrollEvent = function() {
     //This is just wrong. Check if you actualy scrolled, not if you load the page with an offset
     if( !(getCookie('cookie_allowed_level') >= 2) && jQuery(window).scrollTop() > 200) {
         allowCookies(2);
-        console.log('je hebt gescrollet');
+        //console.log('je hebt gescrollet');
     }
 }
 if( !(getCookie('cookie_allowed_level') >= 1) && document.referrer.indexOf(window.location.hostname) != -1){
     var referrer = document.referrer;
-    console.log('je kwam van:' + referrer);
+    //console.log('je kwam van:' + referrer);
     allowCookies(1);
 }
 
