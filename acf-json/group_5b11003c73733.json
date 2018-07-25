@@ -1,0 +1,401 @@
+{
+    "key": "group_5b11003c73733",
+    "title": "Cookies Allowed",
+    "fields": [
+        {
+            "key": "field_5b1115edb3c6e",
+            "label": "Cookie Notice",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_5b110d996d93d",
+            "label": "Eerste bezoek cookie melding tekst",
+            "name": "cookie_notice_text",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 1,
+            "delay": 1
+        },
+        {
+            "key": "field_5b110e616d93f",
+            "label": "Terugkerend bezoek cookie melding tekst",
+            "name": "highest_cookie_notice_text",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 1,
+            "delay": 1
+        },
+        {
+            "key": "field_5b1115cd6d972",
+            "label": "Cookie Modal",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_5b1115a66d971",
+            "label": "Cookie modal tekst",
+            "name": "cookie_modal_text",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 1,
+            "delay": 0
+        },
+        {
+            "key": "field_5b17cb443f248",
+            "label": "Cookie Scripts",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_5b17d069e1eea",
+            "label": "Niveau 1 scripts",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5b17cb563f249",
+            "label": "LVL 1 header scripts",
+            "name": "cookies_allowed_header_scripts_1",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
+            "key": "field_5b17cd91aedc5",
+            "label": "LVL 1 footer scripts",
+            "name": "cookies_allowed_footer_scripts_1",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
+            "key": "field_5b17d080e1eeb",
+            "label": "Niveau 2 scripts",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5b1100960b9d4",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5b17d097e1eee",
+            "label": "LVL 2 header scripts",
+            "name": "cookies_allowed_header_scripts_2",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
+            "key": "field_5b17d08de1eed",
+            "label": "LVL 2 footer scripts",
+            "name": "cookies_allowed_footer_scripts_2",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
+            "key": "field_5b17d084e1eec",
+            "label": "Niveau 3 scripts",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5b1100960b9d4",
+                        "operator": "==",
+                        "value": "3"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5b17d0bee1ef0",
+            "label": "LVL 3 header scripts",
+            "name": "cookies_allowed_header_scripts_3",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
+            "key": "field_5b17d0aee1eef",
+            "label": "LVL 3 footer scripts",
+            "name": "cookies_allowed_footer_scripts_3",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
+            "key": "field_5b584591937e7",
+            "label": "scripts accordion endpoint",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 1
+        },
+        {
+            "key": "field_5b5846ac66fab",
+            "label": "Cookie settings",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_5b1100960b9d4",
+            "label": "Hoogst toegestane Cookie niveau",
+            "name": "highest_cookie_allowed_level",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "1": "1. Functionele cookies & Analyse cookies (anoniem)",
+                "2": "2. Analyse cookies (gebruiker specifiek)",
+                "3": "3. Marketing & Advertentie cookies"
+            },
+            "default_value": [],
+            "allow_null": 0,
+            "multiple": 0,
+            "ui": 0,
+            "ajax": 0,
+            "return_format": "value",
+            "placeholder": ""
+        },
+        {
+            "key": "field_5b5844a8937e5",
+            "label": "Gebruik default css",
+            "name": "cookies_allowed_default_css",
+            "type": "true_false",
+            "instructions": "Ja. Default css wordt ingeladen, je kan natuurlijk zelf nog overschrijven.\r\n<br\/>Nee. Alle styling voor de notification-bar & settings-modal moet je zelf nog doen.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 1,
+            "ui_on_text": "Ja",
+            "ui_off_text": "Nee"
+        },
+        {
+            "key": "field_5b5844fc937e6",
+            "label": "Herlaad pagina na wijzigen van cookie level",
+            "name": "cookies_allowed_reload_page",
+            "type": "true_false",
+            "instructions": "Ja. De pagina doet een refresh om de scripts te initialiseren.\r\n<br\/>Nee. Scripts worden pas ingeladen als er naar een volgende pagina wordt genavigeerd.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 1,
+            "ui_on_text": "Ja",
+            "ui_off_text": "Nee"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "cookie-options"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1532512573
+}
