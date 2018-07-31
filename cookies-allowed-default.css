@@ -266,17 +266,17 @@ h2:first-letter, h3:first-letter, h4:first-letter {text-transform:uppercase}
   appearance: none;
 }
 
-.checkbox:checked + .checkbox__label:before {
+.cookie-modal__checkbox:checked + .cookie-modal__label:before {
   border-color: #338afc;
   background-color: #338afc;
 }
 
-.checkbox {
+.cookie-modal__checkbox {
   width: 0;
   height: 0;
 }
 
-.checkbox__label {
+.cookie-modal__label {
   font-size: 16px;
   font-weight: 300;
   line-height: 18px;
@@ -287,7 +287,7 @@ h2:first-letter, h3:first-letter, h4:first-letter {text-transform:uppercase}
   color: #9b9b9b;
 }
 
-.checkbox__label:before {
+.cookie-modal__label:before {
   position: absolute;
   top: 0;
   left: 0;
@@ -299,11 +299,11 @@ h2:first-letter, h3:first-letter, h4:first-letter {text-transform:uppercase}
   border-radius: 5px;
 }
 
-.checkbox:checked + .checkbox__label:before {
+.cookie-modal__checkbox:checked + .cookie-modal__label:before {
   border: 2px solid #338afc;
 }
 
-.checkbox:checked + .checkbox__label:after {
+.cookie-modal__checkbox:checked + .cookie-modal__label:after {
   position: absolute;
   top: 4px;
   left: 7px;

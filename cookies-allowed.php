@@ -249,20 +249,20 @@ function get_cookies_allowed_html(){
                     </div>
                     <div class="cookie-modal__entry">
                         <h4>Soorten cookies:</h4>
-                        <div class="cookie-checkbox__wrapper">
-                            <input class="cookie-checkbox" id="allow-cookies-check1" type="checkbox" checked="checked" disabled onclick="allowCookies(1);">
-                            <label class="cookie-checkbox__label" for="allow-cookies-check1">Functionele cookies & Analyse cookies (anoniem)</label>
+                        <div class="cookie-modal__checkbox__wrapper">
+                            <input class="cookie-modal__checkbox" id="allow-cookies-check1" type="checkbox" checked="checked" disabled onclick="allowCookies(1);">
+                            <label class="cookie-modal__label" for="allow-cookies-check1">Functionele cookies & Analyse cookies (anoniem)</label>
                         </div>
                     <?php if($highest_cookie_allowed_level >= 2): ?>
-                        <div class="cookie-checkbox__wrapper">
-                            <input class="cookie-checkbox" id="allow-cookies-check2" type="checkbox" <?php if( is_cookies_allowed_level(2) || is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(2)}else{allowCookies(1)};">
-                            <label class="cookie-checkbox__label" for="allow-cookies-check2">Analyse cookies (gebruiker specifiek)</label>
+                        <div class="cookie-modal__checkbox__wrapper">
+                            <input class="cookie-modal__checkbox" id="allow-cookies-check2" type="checkbox" <?php if( is_cookies_allowed_level(2) || is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(2)}else{allowCookies(1)};">
+                            <label class="cookie-modal__label" for="allow-cookies-check2">Analyse cookies (gebruiker specifiek)</label>
                         </div>
                     <?php endif; ?>
                     <?php if($highest_cookie_allowed_level == 3): ?>
-                        <div class="cookie-checkbox__wrapper">
-                            <input class="cookie-checkbox" id="allow-cookies-check3" type="checkbox" <?php if( is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(3)}else{allowCookies(2)};">
-                            <label class="cookie-checkbox__label" for="allow-cookies-check3">Marketing & Advertentie cookies</label>
+                        <div class="cookie-modal__checkbox__wrapper">
+                            <input class="cookie-modal__checkbox" id="allow-cookies-check3" type="checkbox" <?php if( is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(3)}else{allowCookies(2)};">
+                            <label class="cookie-modal__label" for="allow-cookies-check3">Marketing & Advertentie cookies</label>
                         </div>
                     <?php endif; ?>
                     </div>
