@@ -20,11 +20,11 @@ Author URI: https://gravity.nl
 if (!is_admin()) add_action("wp_enqueue_scripts", "enqueue_cookies_allowed_scripts", 11);
 function enqueue_cookies_allowed_scripts() {
   //JS
-  wp_register_script( 'cookies-allowed-js' , get_template_directory_uri() . '/cookies-allowed/cookies-allowed.js', '', '1.1.0', true);
+  wp_register_script( 'cookies-allowed-js' , get_template_directory_uri() . '/includes/cookies-allowed/cookies-allowed.js', '', '1.1.0', true);
   wp_enqueue_script(  'cookies-allowed-js');
 
   // CSS
-  wp_register_style( 'cookies-allowed-default-css' , get_template_directory_uri() . '/cookies-allowed/cookies-allowed-default.css', '', null , 'all');
+  wp_register_style( 'cookies-allowed-default-css' , get_template_directory_uri() . '/includes/cookies-allowed/cookies-allowed-default.css', '', null , 'all');
   if( get_field( 'cookies_allowed_default_css', 'options' )){
     wp_enqueue_style( 'cookies-allowed-default-css');
   }
@@ -116,7 +116,7 @@ function install_and_activate_plugins(){
     //print_r($plugin_install_url);
 
     echo '<div class="error">';
-      echo '<a href="'.$plugin_install_url.'"> Instaleer cf-code-field, dit is nodig om de cookies allowed backend te laten werken</a>';
+      echo '<p><a href="'.$plugin_install_url.'"> Instaleer cf-code-field, dit is nodig om de cookies allowed backend te laten werken</a></p>';
     echo '</div>';
 
 
@@ -130,7 +130,7 @@ add_filter('acf/settings/load_json', 'my_acf_json_cookies_allowed');
 function my_acf_json_cookies_allowed( $paths ) {
 
     // append path
-    $paths[] = get_stylesheet_directory() . '/cookies-allowed/acf-json';
+    $paths[] = get_stylesheet_directory() . '/includes/cookies-allowed/acf-json';
 
     // return
     return $paths;
