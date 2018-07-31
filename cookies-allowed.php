@@ -129,8 +129,9 @@ function install_and_activate_plugins(){
 add_filter('acf/settings/load_json', 'my_acf_json_cookies_allowed');
 function my_acf_json_cookies_allowed( $paths ) {
 
-    // append path
+    // append path to child theme
     $paths[] = get_stylesheet_directory() . '/includes/cookies-allowed/acf-json';
+      //to parent
     $paths[] = get_template_directory() . '/includes/cookies-allowed/acf-json';
 
     // return
@@ -230,7 +231,7 @@ function get_cookies_allowed_html(){
                     <div class="cookie-notice__buttons">
                         <button class="cookie__button cookie__button--opacity" onclick="allowCookies(<?php echo $highest_cookie_allowed_level ?>);">Sta cookies toe</button>
                     <?php if(get_cookies_allowed_level() < 1): ?>
-                        <button class="cookie__button " onclick="toggleCookieModal();">Instellingen</button>
+                        <button class="cookie__button" onclick="toggleCookieModal();">Instellingen</button>
                     <?php endif; ?>
                     </div>
                 </div>
@@ -248,20 +249,20 @@ function get_cookies_allowed_html(){
                     </div>
                     <div class="cookie-modal__entry">
                         <h4>Soorten cookies:</h4>
-                        <div class="checkbox__wrapper">
-                            <input class="checkbox" id="allow-cookies-check1" type="checkbox" checked="checked" disabled onclick="allowCookies(1);">
-                            <label class="checkbox__label" for="allow-cookies-check1">Functionele cookies & Analyse cookies (anoniem)</label>
+                        <div class="cookie-checkbox__wrapper">
+                            <input class="cookie-checkbox" id="allow-cookies-check1" type="checkbox" checked="checked" disabled onclick="allowCookies(1);">
+                            <label class="cookie-checkbox__label" for="allow-cookies-check1">Functionele cookies & Analyse cookies (anoniem)</label>
                         </div>
                     <?php if($highest_cookie_allowed_level >= 2): ?>
-                        <div class="checkbox__wrapper">
-                            <input class="checkbox" id="allow-cookies-check2" type="checkbox" <?php if( is_cookies_allowed_level(2) || is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(2)}else{allowCookies(1)};">
-                            <label class="checkbox__label" for="allow-cookies-check2">Analyse cookies (gebruiker specifiek)</label>
+                        <div class="cookie-checkbox__wrapper">
+                            <input class="cookie-checkbox" id="allow-cookies-check2" type="checkbox" <?php if( is_cookies_allowed_level(2) || is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(2)}else{allowCookies(1)};">
+                            <label class="cookie-checkbox__label" for="allow-cookies-check2">Analyse cookies (gebruiker specifiek)</label>
                         </div>
                     <?php endif; ?>
                     <?php if($highest_cookie_allowed_level == 3): ?>
-                        <div class="checkbox__wrapper">
-                            <input class="checkbox" id="allow-cookies-check3" type="checkbox" <?php if( is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(3)}else{allowCookies(2)};">
-                            <label class="checkbox__label" for="allow-cookies-check3">Marketing & Advertentie cookies</label>
+                        <div class="cookie-checkbox__wrapper">
+                            <input class="cookie-checkbox" id="allow-cookies-check3" type="checkbox" <?php if( is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(3)}else{allowCookies(2)};">
+                            <label class="cookie-checkbox__label" for="allow-cookies-check3">Marketing & Advertentie cookies</label>
                         </div>
                     <?php endif; ?>
                     </div>
