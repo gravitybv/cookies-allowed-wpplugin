@@ -131,6 +131,7 @@ function my_acf_json_cookies_allowed( $paths ) {
 
     // append path
     $paths[] = get_stylesheet_directory() . '/includes/cookies-allowed/acf-json';
+    $paths[] = get_template_directory() . '/includes/cookies-allowed/acf-json';
 
     // return
     return $paths;
