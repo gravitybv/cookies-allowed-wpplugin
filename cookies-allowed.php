@@ -185,12 +185,12 @@ function get_cookies_allowed_html(){
   $html = '';
   ob_start();
 
+  $highest_cookie_allowed_level   = (get_field('highest_cookie_allowed_level', 'options')) ? get_field('highest_cookie_allowed_level', 'options') : 3;
   if(class_exists('NumberFormatter')){
     $numbertoword               = new NumberFormatter("nl", NumberFormatter::SPELLOUT);
     $highest_cookie_word        = $numbertoword->format($highest_cookie_allowed_level);
   }
   $previous_cookie_level          = get_cookies_allowed_level();
-  $highest_cookie_allowed_level   = (get_field('highest_cookie_allowed_level', 'options')) ? get_field('highest_cookie_allowed_level', 'options') : 3;
   $acf_cookie_modal_text          = get_field('cookie_modal_text', 'options');
   $default_cookie_modal_text      ='
                         <h4>Wat zijn cookies?</h4>
