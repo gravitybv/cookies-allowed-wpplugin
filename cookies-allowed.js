@@ -20,23 +20,23 @@ function getCookie(cookiename) {
 function allowCookies(cookieLevel) {
     jQuery(window).unbind('scroll', handleCookieScrollEvent);
     previous_cookie_allowed_level = getCookie('cookie_allowed_level');
-    highestCookieAllowedLevel     = $('#cookie-notice').data('highest-cookie-allowed-level');
+    highestCookieAllowedLevel     = jQuery('#cookie-notice').data('highest-cookie-allowed-level');
 
     if(cookieLevel == 1 && previous_cookie_allowed_level != 1){
-        $('#cookie-notice').show();
+        jQuery('#cookie-notice').show();
         setCookie('cookie_allowed_level', 1, 30);
-        $('.cookie-modal').find('#allow-cookies-check2, #allow-cookies-check3').prop('checked', false);
+        jQuery('.cookie-modal').find('#allow-cookies-check2, #allow-cookies-check3').prop('checked', false);
         console.log('cookie_allowed_level is nu gezet op 1');
     }
     if(cookieLevel == 2 && previous_cookie_allowed_level != 2){
-        $('#cookie-notice').show();
+        jQuery('#cookie-notice').show();
         //Set cookie
         setCookie('cookie_allowed_level', 2, 30);
 
         //hide level 1 notifcation
-        $('.cookie-modal').find('#allow-cookies-check2').prop('checked', true);
-        $('.cookie-modal').find('#allow-cookies-check3').prop('checked', false);
-        $('#cookie-notice').find('#cookie-notification-level-2').fadeOut( 600 );
+        jQuery('.cookie-modal').find('#allow-cookies-check2').prop('checked', true);
+        jQuery('.cookie-modal').find('#allow-cookies-check3').prop('checked', false);
+        jQuery('#cookie-notice').find('#cookie-notification-level-2').fadeOut( 600 );
         console.log('cookie_allowed_level is nu gezet op 2');
     }
     if(cookieLevel == 3 && previous_cookie_allowed_level != 3){
@@ -44,11 +44,11 @@ function allowCookies(cookieLevel) {
         setCookie('cookie_allowed_level', 3, 30);
 
         //hide level 1 notifcation
-        $('.cookie-modal').find('#allow-cookies-check2, #allow-cookies-check3').prop('checked', true);
+        jQuery('.cookie-modal').find('#allow-cookies-check2, #allow-cookies-check3').prop('checked', true);
         console.log('cookie_allowed_level is nu gezet op 3');
     }
     if(cookieLevel >= highestCookieAllowedLevel){
-        $('#cookie-notice').fadeOut( 600 );
+        jQuery('#cookie-notice').fadeOut( 600 );
         cookiebarOffset(600, '0');
     }
 }
@@ -56,17 +56,17 @@ function allowCookies(cookieLevel) {
 function cookiebarOffset(timeoutTime = 1000, pxOffset) {
     setTimeout(function(){
         if ( !pxOffset ){
-            pxOffset = $('.cookie-notice').outerHeight(true);
+            pxOffset = jQuery('.cookie-notice').outerHeight(true);
         }
-        //$('html').css('padding-bottom', cookiebarHeight);
-        $('html').animate({ 'padding-bottom' : pxOffset }, "slow");
+        //jQuery('html').css('padding-bottom', cookiebarHeight);
+        jQuery('html').animate({ 'padding-bottom' : pxOffset }, "slow");
         //console.log('cookiebar offset van ' + pxOffset +' is gedaan na:' + timeoutTime);
     }, timeoutTime);
 }
 
 function toggleCookieModal(){
-    $('body').toggleClass("cookie-modal--open");
-    if(!$('body').hasClass( "cookie-modal--open" ) && $('#cookies-allowed').attr('data-page-reload') === "true"){
+    jQuery('body').toggleClass("cookie-modal--open");
+    if(!jQuery('body').hasClass( "cookie-modal--open" ) && jQuery('#cookies-allowed').attr('data-page-reload') === "true"){
         setTimeout(function(){
             //console.log('RELOAD!');
             location.reload();
@@ -95,13 +95,13 @@ jQuery.post(
     },
     function( response ) {
         //console.log('load cookie html: ' + response);
-        $('#cookies-allowed').replaceWith(response);
+        jQuery('#cookies-allowed').replaceWith(response);
 
         cookieLevel                 = getCookie('cookie_allowed_level');
-        highestCookieAllowedLevel   = $('#cookie-notice').data('highest-cookie-allowed-level');
+        highestCookieAllowedLevel   = jQuery('#cookie-notice').data('highest-cookie-allowed-level');
 
         if(cookieLevel < highestCookieAllowedLevel){
-            $('#cookie-notice').show();
+            jQuery('#cookie-notice').show();
             cookiebarOffset();
         }
     }
@@ -130,8 +130,8 @@ jQuery.post(
             }
         }
 
-        $('head').append(header_scripts);
-        $('#cookies-allowed-footer-scripts').html(footer_scripts);
+        jQuery('head').append(header_scripts);
+        jQuery('#cookies-allowed-footer-scripts').html(footer_scripts);
     },
 );
 
