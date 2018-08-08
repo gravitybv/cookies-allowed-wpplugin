@@ -80,7 +80,7 @@ add_action( 'wp_ajax_nopriv_get_cookies_allowed_scripts', 'get_cookies_allowed_s
 function get_cookies_allowed_scripts(){
   $scripts = array();
 
-  if(get_cookies_allowed_level() >= 1 ){
+  if(get_cookies_allowed_level() >= 0 ){
     //$scripts["header"][] = locate_template('parts/cookies_allowed_header_scripts.php');
     $scripts["header"][] = get_field( 'cookies_allowed_header_scripts_1', 'options' );
 
