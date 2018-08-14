@@ -10,6 +10,22 @@ Author URI: https://gravity.nl
 
 
 
+/*
+*   Description: return the url of a file if exists in child, if not return parent file url
+*   Args: $path relative to theme file path
+*   Expected return: http://pepijn.local/autovakmeester.nl/wp-content/themes/gravitycore/includes/cookies-allowed/cookies-allowed.js
+*   Usage: gravity_get_available_file_uri('includes/cookies-allowed/cookies-allowed.js')
+*/
+
+function gravity_get_available_file_uri($path) {
+    if ( file_exists( get_stylesheet_directory() . '/' . $path )) {
+        $available_path = get_stylesheet_directory_uri() . '/' . $path ;
+    } else {
+        $available_path = get_template_directory_uri() . '/' . $path ;
+    }
+    return $available_path;
+}
+
 
 /*
 *   Description: enqueue cookies_allowed scripts
@@ -20,11 +36,11 @@ Author URI: https://gravity.nl
 if (!is_admin()) add_action("wp_enqueue_scripts", "enqueue_cookies_allowed_scripts", 11);
 function enqueue_cookies_allowed_scripts() {
   //JS
-  wp_register_script( 'cookies-allowed-js' , get_template_directory_uri() . '/includes/cookies-allowed/cookies-allowed.js', '', '1.1.0', true);
+  wp_register_script( 'cookies-allowed-js' , gravity_get_available_file_uri('includes/cookies-allowed/cookies-allowed.js'), '', '1.1.0', true);
   wp_enqueue_script(  'cookies-allowed-js');
 
   // CSS
-  wp_register_style( 'cookies-allowed-default-css' , get_template_directory_uri() . '/includes/cookies-allowed/cookies-allowed-default.css', '', null , 'all');
+  wp_register_style( 'cookies-allowed-default-css' , gravity_get_available_file_uri('includes/cookies-allowed/cookies-allowed-default.css'), '', null , 'all');
   if( get_field( 'cookies_allowed_default_css', 'options' )){
     wp_enqueue_style( 'cookies-allowed-default-css');
   }
@@ -32,7 +48,7 @@ function enqueue_cookies_allowed_scripts() {
   /* Telling the JS file where ajaxUrl is */
   wp_localize_script( 'cookies-allowed-js', 'ajaxUrl', array(
       'url' => admin_url() . 'admin-ajax.php',
-    ));
+  ));
 }
 
 
@@ -108,18 +124,20 @@ function get_cookies_allowed_scripts(){
 }
 
 
-add_action( 'admin_init', 'install_and_activate_plugins' );
+add_action( 'admin_notices', 'install_and_activate_plugins' );
 function install_and_activate_plugins(){
-  //include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
-  if ( ! class_exists( 'acf_code_field' ) && current_user_can( 'manage_options' ) ){
-    $plugin_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=acf-code-field'), 'install-plugin_acf-code-field');
+  global $wp;
+  $current_request = add_query_arg($_GET,$wp->request);
+  $plugin_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=acf-code-field'), 'install-plugin_acf-code-field');
+  $installing = (isset($current_request) && strpos($plugin_install_url, $current_request) == true ) ? true : false; // needs work......
+  if ( ! class_exists( 'acf_code_field' ) && current_user_can( 'manage_options') /* && $installing == true  */) {
     //print_r($plugin_install_url);
-
-    echo '<div class="error">';
-      echo '<p><a href="'.$plugin_install_url.'"> Instaleer cf-code-field, dit is nodig om de cookies allowed backend te laten werken</a></p>';
-    echo '</div>';
-
-
+    ?>
+    <div class="notice notice-warning">
+      <h3>Cookies Allowed plugin</h3>
+      <p><?php _e( '<a href="'.$plugin_install_url.'">Instaleer acf-code-field</a>, dit is nodig om de cookies allowed backend te laten werken', 'gravity_theme' ); ?></p>
+    </div>
+    <?php
   }
 }
 
