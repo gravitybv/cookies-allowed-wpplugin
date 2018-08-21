@@ -127,10 +127,10 @@ function get_cookies_allowed_scripts(){
 add_action( 'admin_notices', 'install_and_activate_plugins' );
 function install_and_activate_plugins(){
   global $wp;
-  $current_request = add_query_arg($_GET,$wp->request);
-  $plugin_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=acf-code-field'), 'install-plugin_acf-code-field');
-  $installing = (isset($current_request) && strpos($plugin_install_url, $current_request) == true ) ? true : false; // needs work......
   if ( ! class_exists( 'acf_code_field' ) && current_user_can( 'manage_options') /* && $installing == true  */) {
+    $current_request = add_query_arg($_GET,$wp->request);
+    $plugin_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=acf-code-field'), 'install-plugin_acf-code-field');
+    $installing = (isset($current_request) && strpos($plugin_install_url, $current_request) == true ) ? true : false; // needs work......
     //print_r($plugin_install_url);
     ?>
     <div class="notice notice-warning">
