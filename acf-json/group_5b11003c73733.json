@@ -108,6 +108,59 @@
             "endpoint": 0
         },
         {
+            "key": "field_5b7fb57b0c85d",
+            "label": "BEFORE ALL SCRIPTS",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5b7fb5950c85e",
+            "label": "Before all header scripts",
+            "name": "cookies_allowed_header_scripts_before_all",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
+            "key": "field_5b7fb5b70c85f",
+            "label": "Before all footer scripts",
+            "name": "cookies_allowed_footer_scripts_before_all",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
             "key": "field_5b17d069e1eea",
             "label": "Niveau 1 scripts",
             "name": "",
@@ -283,6 +336,59 @@
             "theme": "railscasts"
         },
         {
+            "key": "field_5b7fb5d70c860",
+            "label": "AFTER ALL SCRIPTS",
+            "name": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
+            "key": "field_5b7fb5fd0c861",
+            "label": "After all header scripts",
+            "name": "cookies_allowed_header_scripts_after_all",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
+            "key": "field_5b7fb6000c862",
+            "label": "After all footer scripts",
+            "name": "cookies_allowed_footer_scripts_after_all",
+            "type": "acf_code_field",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "mode": "htmlmixed",
+            "theme": "railscasts"
+        },
+        {
             "key": "field_5b584591937e7",
             "label": "scripts accordion endpoint",
             "name": "",
@@ -397,5 +503,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1532512573
+    "modified": 1535096465
 }

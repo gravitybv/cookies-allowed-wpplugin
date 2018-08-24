@@ -95,6 +95,10 @@ add_action( 'wp_ajax_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts'
 add_action( 'wp_ajax_nopriv_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts' );
 function get_cookies_allowed_scripts(){
   $scripts = array();
+    
+  // Script to be loaded before any cookie check 
+  $scripts["header"][] = get_field( 'cookies_allowed_header_scripts_before_all', 'options' );
+  $scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_before_all', 'options' );
 
   if(get_cookies_allowed_level() >= 0 ){
     //$scripts["header"][] = locate_template('parts/cookies_allowed_header_scripts.php');
@@ -117,6 +121,11 @@ function get_cookies_allowed_scripts(){
     //$scripts["footer"][] = locate_template('parts/cookies_allowed_footer_scripts.php');
     $scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_3', 'options' );
   }
+
+  // Script to be loaded after any cookie check 
+  $scripts["header"][] = get_field( 'cookies_allowed_header_scripts_after_all', 'options' );
+  $scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_after_all', 'options' );
+  
   //         print_r($scripts);
   //wp_send_json($scripts);
   echo json_encode($scripts);
