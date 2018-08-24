@@ -45,10 +45,17 @@ function enqueue_cookies_allowed_scripts() {
     wp_enqueue_style( 'cookies-allowed-default-css');
   }
 
+  // If wpml = active add the language to the ajax url
+  if( in_array('sitepress-multilingual-cms/sitepress.php', get_option('active_plugins')) ){
+  	$ajaxurl = admin_url( 'admin-ajax.php?lang=' . ICL_LANGUAGE_CODE );
+  } else{
+  	$ajaxurl = admin_url( 'admin-ajax.php');
+  }
   /* Telling the JS file where ajaxUrl is */
   wp_localize_script( 'cookies-allowed-js', 'ajaxUrl', array(
-      'url' => admin_url() . 'admin-ajax.php',
+      'url' => $ajaxurl,
   ));
+
 }
 
 
@@ -94,9 +101,14 @@ function is_cookies_allowed_level($cookie_allowed_level = 1){
 add_action( 'wp_ajax_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts' );
 add_action( 'wp_ajax_nopriv_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts' );
 function get_cookies_allowed_scripts(){
+  //$my_current_lang = apply_filters( 'wpml_current_language', NULL );
+  //wp_die($my_current_lang); // Returns en, which is correct and what it should be
+  //do_action('wpml_switch_language', $_GET['wpml_lang']); // Here I'm trying to switch the language, but it does not do anything
+
+
   $scripts = array();
-    
-  // Script to be loaded before any cookie check 
+
+  // Script to be loaded before any cookie check
   $scripts["header"][] = get_field( 'cookies_allowed_header_scripts_before_all', 'options' );
   $scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_before_all', 'options' );
 
@@ -122,10 +134,10 @@ function get_cookies_allowed_scripts(){
     $scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_3', 'options' );
   }
 
-  // Script to be loaded after any cookie check 
+  // Script to be loaded after any cookie check
   $scripts["header"][] = get_field( 'cookies_allowed_header_scripts_after_all', 'options' );
   $scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_after_all', 'options' );
-  
+
   //         print_r($scripts);
   //wp_send_json($scripts);
   echo json_encode($scripts);
@@ -143,7 +155,7 @@ function install_and_activate_plugins(){
     //print_r($plugin_install_url);
     ?>
     <div class="notice notice-warning">
-      <h3>Cookies Allowed plugin</h3>
+      <h3><?php esc_html_e( 'Cookies Allowed plugin', 'gravity_theme' ); ?></h3>
       <p><?php _e( '<a href="'.$plugin_install_url.'">Instaleer acf-code-field</a>, dit is nodig om de cookies allowed backend te laten werken', 'gravity_theme' ); ?></p>
     </div>
     <?php
@@ -217,31 +229,24 @@ function get_cookies_allowed_html(){
     $numbertoword               = new NumberFormatter("nl", NumberFormatter::SPELLOUT);
     $highest_cookie_word        = $numbertoword->format($highest_cookie_allowed_level);
   }
+  $policy_page_url                = '#';
   $previous_cookie_level          = get_cookies_allowed_level();
   $acf_cookie_modal_text          = get_field('cookie_modal_text', 'options');
-  $default_cookie_modal_text      ='
-                        <h4>Wat zijn cookies?</h4>
+  $default_cookie_modal_text      = sprintf( __( '<h4>Wat zijn cookies?</h4>
                         <p>Cookies zijn kleine bestanden die door ons op je computer, tablet of smartphone worden geplaatst om een website goed te kunnen gebruiken. Sommige cookies zijn noodzakelijk voor een optimaal gebruik van de website. Sommige cookies zijn extra.</p>
                         <h4>Beheer zelf je cookie-instellingen</h4>
                         <p>Functionele cookies zijn nodig om de website te kunnen gebruiken, daarom staan deze altijd aan. Voor een optimale online ervaring, raden wij aan om extra cookies aan te zetten</p>
 
-                        <p>Meer informatie over de verschillende soorten cookies en hun werking is te lezen in onze <a href="#">Cookie Policy</a>.</p>
-        ';
-
-
+                        <p>Meer informatie over de verschillende soorten cookies en hun werking is te lezen in onze <a href="%s">Cookie Policy</a>.</p>', 'gravity_theme' ), $policy_page_url );
 
   $acf_cookie_notice_text         = get_field('cookie_notice_text', 'options');
-  $default_cookie_notice_text     ='
-                            <p>
-                                '.$_SERVER["SERVER_NAME"].' maakt gebruik van cookies om jouw ervaring met deze website te optimaliseren. Door het gebruik van deze website ga je automatisch akkoord met het gebruik van functionele cookies en anonieme analyse cookies.
-                                </br>Wij maken ook gebruik van gebruiker specifieke analyse en marketing cookies, door op \'Sta cookies toe\' te klikken ga je ook akkoord met het gebruik van deze cookies.Ga naar <a href="#" class="js-cookie-modal">Instellingen</a> om je cookies op deze website te beheren.
-                            </p>';
+  $default_cookie_notice_text     = sprintf( __( ' <p> %1$s maakt gebruik van cookies om jouw ervaring met deze website te optimaliseren. Door het gebruik van deze website ga je automatisch akkoord met het gebruik van functionele cookies en anonieme analyse cookies.
+                                </br>Wij maken ook gebruik van gebruiker specifieke analyse en marketing cookies, door op \'Sta cookies toe\' te klikken ga je ook akkoord met het gebruik van deze cookies. Ga naar <a href="#" class="js-cookie-modal">Instellingen</a> om je cookies op deze website te beheren.</p>', 'gravity_theme' ), $_SERVER["SERVER_NAME"] );
+
 
   $acf_highest_cookie_notice_text         = get_field('highest_cookie_notice_text', 'options');
-  $default_highest_cookie_notice_text     ='
-                            <p>
-                                Wij maken ook gebruik van gebruiker specifieke analyse en marketing cookies, door op \'Sta cookies toe\' te klikken ga je ook akkoord met het gebruik van deze cookies.Ga naar <a href="#" class="js-cookie-modal">Instellingen</a> om je cookies op deze website te beheren.
-                            </p>';
+  $default_highest_cookie_notice_text     = __( '<p> Wij maken ook gebruik van gebruiker specifieke analyse en marketing cookies, door op \'Sta cookies toe\' te klikken ga je ook akkoord met het gebruik van deze cookies. Ga naar <a href="#" class="js-cookie-modal">Instellingen</a> om je cookies op deze website te beheren. </p>', 'gravity_theme' );
+
 ?>
     <div id="cookies-allowed" data-page-reload="<?php echo get_field( 'cookies_allowed_reload_page', 'options' ) ? 'true' : 'false'; ?>">
         <div id="cookie-notice" class="cookie-notice" data-highest-cookie-allowed-level="<?php echo $highest_cookie_allowed_level ?>">
@@ -256,9 +261,9 @@ function get_cookies_allowed_html(){
                         <?php endif; ?>
                     </div>
                     <div class="cookie-notice__buttons">
-                        <button class="cookie__button cookie__button--opacity" onclick="allowCookies(<?php echo $highest_cookie_allowed_level ?>);">Sta cookies toe</button>
+                        <button class="cookie__button cookie__button--opacity" onclick="allowCookies(<?php echo $highest_cookie_allowed_level ?>);"><?php esc_html_e( 'Sta cookies toe', 'gravity_theme' ); ?></button>
                     <?php if(get_cookies_allowed_level() < 1): ?>
-                        <button class="cookie__button" onclick="toggleCookieModal();">Instellingen</button>
+                        <button class="cookie__button" onclick="toggleCookieModal();"><?php esc_html_e( 'Instellingen', 'gravity_theme' ); ?></button>
                     <?php endif; ?>
                     </div>
                 </div>
@@ -270,32 +275,32 @@ function get_cookies_allowed_html(){
             <div class="cookie-modal__backdrop js-cookie-modal"></div>
             <div class="cookie-modal__wrapper">
                 <div class="cookie-modal__content">
-                    <h3 class="cookie-modal__title">Kies je instellingen</h3>
+                    <h3 class="cookie-modal__title"><?php esc_html_e( 'Kies je instellingen', 'gravity_theme' ); ?></h3>
                     <div class="cookie-modal__entry">
                         <?php echo empty($acf_cookie_modal_text) ? $default_cookie_modal_text : $acf_cookie_modal_text; ?>
                     </div>
                     <div class="cookie-modal__entry">
-                        <h4>Soorten cookies:</h4>
+                        <h4><?php esc_html_e( 'Soorten cookies:', 'gravity_theme' ); ?></h4>
                         <div class="cookie-modal__checkbox__wrapper">
                             <input class="cookie-modal__checkbox" id="allow-cookies-check1" type="checkbox" checked="checked" disabled onclick="allowCookies(1);">
-                            <label class="cookie-modal__label" for="allow-cookies-check1">Functionele cookies & Analyse cookies (anoniem)</label>
+                            <label class="cookie-modal__label" for="allow-cookies-check1"><?php esc_html_e( 'Functionele cookies & Analyse cookies (anoniem)', 'gravity_theme' ); ?></label>
                         </div>
                     <?php if($highest_cookie_allowed_level >= 2): ?>
                         <div class="cookie-modal__checkbox__wrapper">
                             <input class="cookie-modal__checkbox" id="allow-cookies-check2" type="checkbox" <?php if( is_cookies_allowed_level(2) || is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(2)}else{allowCookies(1)};">
-                            <label class="cookie-modal__label" for="allow-cookies-check2">Analyse cookies (gebruiker specifiek)</label>
+                            <label class="cookie-modal__label" for="allow-cookies-check2"><?php esc_html_e( 'Analyse cookies (gebruiker specifiek)', 'gravity_theme' ); ?></label>
                         </div>
                     <?php endif; ?>
                     <?php if($highest_cookie_allowed_level == 3): ?>
                         <div class="cookie-modal__checkbox__wrapper">
                             <input class="cookie-modal__checkbox" id="allow-cookies-check3" type="checkbox" <?php if( is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(3)}else{allowCookies(2)};">
-                            <label class="cookie-modal__label" for="allow-cookies-check3">Marketing & Advertentie cookies</label>
+                            <label class="cookie-modal__label" for="allow-cookies-check3"><?php esc_html_e( 'Marketing & Advertentie cookies', 'gravity_theme' ); ?></label>
                         </div>
                     <?php endif; ?>
                     </div>
                     <div class="cookie-modal__entry cookie-modal__buttons">
-                        <button class="cookie__button cookie__button--large cookie__button--success" onclick="toggleCookieModal();">Opslaan</button>
-                        <button class="cookie__button cookie__button--large cookie__button--ghost js-cookie-modal" onclick="allowCookies(<?php echo $previous_cookie_level ?>);">Annuleren</button>
+                        <button class="cookie__button cookie__button--large cookie__button--success" onclick="toggleCookieModal();"><?php esc_html_e( 'Opslaan', 'gravity_theme' ); ?></button>
+                        <button class="cookie__button cookie__button--large cookie__button--ghost js-cookie-modal" onclick="allowCookies(<?php echo $previous_cookie_level ?>);"><?php esc_html_e( 'Annuleren', 'gravity_theme' ); ?></button>
                     </div>
                 </div>
             </div>
