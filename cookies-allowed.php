@@ -2,11 +2,22 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 1.1.1
+Version: 1.2.0
 Author: Pepijn Nichting
 Author URI: https://gravity.nl
 */
 
+
+
+
+
+
+function set_cookies_allowed_language_path() {
+    $plugin_rel_path = locate_template('includes/cookies-allowed/languages', false, false); /* Relative to WP_PLUGIN_DIR */
+    //echo($plugin_rel_path);
+    load_plugin_textdomain( 'cookies-allowed', false, $plugin_rel_path );
+}
+add_action('init', 'set_cookies_allowed_language_path');
 
 
 
