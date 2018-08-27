@@ -16,21 +16,13 @@ msgstr ""
 
 # wpml-name: bf071c4e72fd01f4695a181b4cb1838e
 msgid "<p>We also use user specific analytic and marketing cookies, by clicking on 'Allow cookies' you also agree to the use of these cookies. Go to <a href=\"#\" class=\"js-cookie-modal\"> Settings </a> to manage your cookies on this website.</p>"
-msgstr "<p>Wij maken ook gebruik van gebruiker specifieke analyse en marketing cookies, door op \\'Sta cookies toe\\' te klikken ga je ook akkoord met het gebruik van deze cookies. Ga naar <a href=\"#\" class=\"js-cookie-modal\">Instellingen</a> om je cookies op deze website te beheren.</p>"
+msgstr "<p>Wij maken ook gebruik van gebruiker specifieke analyse en marketing cookies, door op 'Sta cookies toe' te klikken ga je ook akkoord met het gebruik van deze cookies. Ga naar <a href=\"#\" class=\"js-cookie-modal\">Instellingen</a> om je cookies op deze website te beheren.</p>"
 
 # wpml-name: 16a2259bf6b65d861db838219d67780e
-msgid ""
-"<h4>What are cookies?</h4>\\n\n"
-"                                    <p>Cookies are small files that are placed by us on your computer, tablet or smartphone in order to use a website properly. Some cookies are necessary for optimal use of the website. Some cookies are extra.</p>\\n\n"
-"                                    <h4>Manage your cookie settings</h4>\\n\n"
-"                                    <p>Functional cookies are needed to use the website, which is why they are always on. For an optimal online experience, we recommend to enable additional cookies</p>\\n\n"
-"                                    <p>More information about the different types of cookies and their effect can be found in our <a href=\"%s\">Cookie Policy</a> page.</p>\n"
+msgid "<h4>What are cookies?</h4><p>Cookies are small files that are placed by us on your computer, tablet or smartphone in order to use a website properly. Some cookies are necessary for optimal use of the website. Some cookies are extra.</p><h4>Manage your cookie settings</h4><p>Functional cookies are needed to use the website, which is why they are always on. For an optimal online experience, we recommend to enable additional cookies</p><p>More information about the different types of cookies and their effect can be found in our <a href=\"%s\">Cookie Policy</a> page.</p>"
 msgstr ""
-"<h4>Wat zijn cookies?</h4>\\n\n"
-"<p>Cookies zijn kleine bestanden die door ons op je computer, tablet of smartphone worden geplaatst om een website goed te kunnen gebruiken. Sommige cookies zijn noodzakelijk voor een optimaal gebruik van de website. Sommige cookies zijn extra.</p>\\n\n"
-"<h4>Beheer zelf je cookie-instellingen</h4>\\n\n"
-"<p>Functionele cookies zijn nodig om de website te kunnen gebruiken, daarom staan deze altijd aan. Voor een optimale online ervaring, raden wij aan om extra cookies aan te zetten</p>\\n\n"
-"<p>Meer informatie over de verschillende soorten cookies en hun werking is te lezen in onze <a href=\"%s\">Cookie Policy</a>.</p>\n"
+"<h4>Wat zijn cookies?</h4><p>Cookies zijn kleine bestanden die door ons op je computer, tablet of smartphone worden geplaatst om een website goed te kunnen gebruiken. Sommige cookies zijn noodzakelijk voor een optimaal gebruik van de website. Sommige cookies zijn extra.</p><h4>Beheer zelf je cookie-instellingen</h4><p>Functionele cookies zijn nodig om de website te kunnen gebruiken, daarom staan deze altijd aan. Voor een optimale online ervaring, raden wij aan om extra cookies aan te zetten</p><p>Meer informatie over de verschillende soorten cookies en hun werking is te "
+"lezen in onze <a href=\"%s\">Cookie Policy</a>.</p>"
 
 # wpml-name: 9c31a99e38bbe53a6406876625b0b927
 msgid "<p> %s uses cookies to optimize your experience on this website. By using this website you automatically agree to the use of functional cookies and anonymous Analytic cookies.</p>"
@@ -46,7 +38,7 @@ msgstr "Instellingen"
 
 # wpml-name: 5b40bc02cdc1639c4c615eeabdfb42ac
 msgid "Manage your settings"
-msgstr "Manage your settings"
+msgstr "Beheer je voorkeuren"
 
 # wpml-name: ea4788705e6873b424c65e91c2846b19
 msgid "Cancel"

@@ -7,17 +7,34 @@ Author: Pepijn Nichting
 Author URI: https://gravity.nl
 */
 
+	function load_cookies_allowed_textdomain() {
+
+		// vars
+		$domain       = 'cookies-allowed';
+		$locale       = apply_filters( 'plugin_locale', get_locale(), $domain );
+		$mofile       = $domain . '-' . $locale . '.mo';
+    $plugin_path  = locate_template('includes/cookies-allowed/languages/', false, false);
+
+		// load from the languages directory first
+		load_textdomain( $domain, WP_LANG_DIR . '/plugins/' . $mofile );
+
+
+		// load from plugin lang folder
+		load_textdomain( $domain, $plugin_path . $mofile );
+	}
+  add_action('init', 'load_cookies_allowed_textdomain');
 
 
 
 
 
+// maybe we stil need this..... for now user the load_cookies_allowed_textdomain function
 function set_cookies_allowed_language_path() {
-    $plugin_rel_path = locate_template('includes/cookies-allowed/languages', false, false); /* Relative to WP_PLUGIN_DIR */
-    //echo($plugin_rel_path);
+    $plugin_rel_path = locate_template('includes/cookies-allowed/languages/', false, false); /* Relative to WP_PLUGIN_DIR */
+    echo($plugin_rel_path);
     load_plugin_textdomain( 'cookies-allowed', false, $plugin_rel_path );
 }
-add_action('init', 'set_cookies_allowed_language_path');
+//add_action('init', 'set_cookies_allowed_language_path');
 
 
 
@@ -166,8 +183,8 @@ function install_and_activate_plugins(){
     //print_r($plugin_install_url);
     ?>
     <div class="notice notice-warning">
-      <h3><?php esc_html_e( 'Cookies Allowed plugin', 'gravity_theme' ); ?></h3>
-      <p><?php _e( '<a href="'.$plugin_install_url.'">Instaleer acf-code-field</a>, dit is nodig om de cookies allowed backend te laten werken', 'gravity_theme' ); ?></p>
+      <h3><?php esc_html_e( 'Cookies Allowed plugin', 'cookies-allowed' ); ?></h3>
+      <p><?php _e( '<a href="'.$plugin_install_url.'">Instaleer acf-code-field</a>, dit is nodig om de cookies allowed backend te laten werken', 'cookies-allowed' ); ?></p>
     </div>
     <?php
   }
@@ -243,18 +260,14 @@ function get_cookies_allowed_html(){
   $policy_page_url                = '#';
   $previous_cookie_level          = get_cookies_allowed_level();
   $acf_cookie_modal_text          = get_field('cookie_modal_text', 'options');
-  $default_cookie_modal_text      = sprintf( __( '<h4>What are cookies?</h4>\n
-                                    <p>Cookies are small files that are placed by us on your computer, tablet or smartphone in order to use a website properly. Some cookies are necessary for optimal use of the website. Some cookies are extra.</p>\n
-                                    <h4>Manage your cookie settings</h4>\n
-                                    <p>Functional cookies are needed to use the website, which is why they are always on. For an optimal online experience, we recommend to enable additional cookies</p>\n
-                                    <p>More information about the different types of cookies and their effect can be found in our <a href="%s">Cookie Policy</a> page.</p>', 'gravity_theme' ), $policy_page_url );
+  $default_cookie_modal_text      = sprintf( __( '<h4>What are cookies?</h4><p>Cookies are small files that are placed by us on your computer, tablet or smartphone in order to use a website properly. Some cookies are necessary for optimal use of the website. Some cookies are extra.</p><h4>Manage your cookie settings</h4><p>Functional cookies are needed to use the website, which is why they are always on. For an optimal online experience, we recommend to enable additional cookies</p><p>More information about the different types of cookies and their effect can be found in our <a href="%s">Cookie Policy</a> page.</p>', 'cookies-allowed' ), $policy_page_url );
 
   $acf_cookie_notice_text         = get_field('cookie_notice_text', 'options');
-  $default_cookie_notice_text     = sprintf( __( '<p> %s uses cookies to optimize your experience on this website. By using this website you automatically agree to the use of functional cookies and anonymous Analytic cookies.</p>', 'gravity_theme'), $_SERVER["SERVER_NAME"] );
+  $default_cookie_notice_text     = sprintf( __( '<p> %s uses cookies to optimize your experience on this website. By using this website you automatically agree to the use of functional cookies and anonymous Analytic cookies.</p>', 'cookies-allowed'), $_SERVER["SERVER_NAME"] );
 
 
   $acf_highest_cookie_notice_text         = get_field('highest_cookie_notice_text', 'options');
-  $default_highest_cookie_notice_text     = __( '<p>We also use user specific analytic and marketing cookies, by clicking on \'Allow cookies\' you also agree to the use of these cookies. Go to <a href="#" class="js-cookie-modal"> Settings </a> to manage your cookies on this website.</p>', 'gravity_theme' );
+  $default_highest_cookie_notice_text     = __( '<p>We also use user specific analytic and marketing cookies, by clicking on \'Allow cookies\' you also agree to the use of these cookies. Go to <a href="#" class="js-cookie-modal"> Settings </a> to manage your cookies on this website.</p>', 'cookies-allowed' );
 
 ?>
     <div id="cookies-allowed" data-page-reload="<?php echo get_field( 'cookies_allowed_reload_page', 'options' ) ? 'true' : 'false'; ?>">
@@ -270,9 +283,9 @@ function get_cookies_allowed_html(){
                         <?php endif; ?>
                     </div>
                     <div class="cookie-notice__buttons">
-                        <button class="cookie__button cookie__button--opacity" onclick="allowCookies(<?php echo $highest_cookie_allowed_level ?>);"><?php esc_html_e( 'Allow cookies', 'gravity_theme' ); ?></button>
+                        <button class="cookie__button cookie__button--opacity" onclick="allowCookies(<?php echo $highest_cookie_allowed_level ?>);"><?php esc_html_e( 'Allow cookies', 'cookies-allowed' ); ?></button>
                     <?php if(get_cookies_allowed_level() < 1): ?>
-                        <button class="cookie__button" onclick="toggleCookieModal();"><?php esc_html_e( 'Settings', 'gravity_theme' ); ?></button>
+                        <button class="cookie__button" onclick="toggleCookieModal();"><?php esc_html_e( 'Settings', 'cookies-allowed' ); ?></button>
                     <?php endif; ?>
                     </div>
                 </div>
@@ -284,32 +297,32 @@ function get_cookies_allowed_html(){
             <div class="cookie-modal__backdrop js-cookie-modal"></div>
             <div class="cookie-modal__wrapper">
                 <div class="cookie-modal__content">
-                    <h3 class="cookie-modal__title"><?php esc_html_e( 'Manage your settings', 'gravity_theme' ); ?></h3>
+                    <h3 class="cookie-modal__title"><?php esc_html_e( 'Manage your settings', 'cookies-allowed' ); ?></h3>
                     <div class="cookie-modal__entry">
                         <?php echo empty($acf_cookie_modal_text) ? $default_cookie_modal_text : $acf_cookie_modal_text; ?>
                     </div>
                     <div class="cookie-modal__entry">
-                        <h4><?php esc_html_e( 'Cookie types:', 'gravity_theme' ); ?></h4>
+                        <h4><?php esc_html_e( 'Cookie types:', 'cookies-allowed' ); ?></h4>
                         <div class="cookie-modal__checkbox__wrapper">
                             <input class="cookie-modal__checkbox" id="allow-cookies-check1" type="checkbox" checked="checked" disabled onclick="allowCookies(1);">
-                            <label class="cookie-modal__label" for="allow-cookies-check1"><?php esc_html_e( 'Functional & Analytic cookies (anonymous)', 'gravity_theme' ); ?></label>
+                            <label class="cookie-modal__label" for="allow-cookies-check1"><?php esc_html_e( 'Functional & Analytic cookies (anonymous)', 'cookies-allowed' ); ?></label>
                         </div>
                     <?php if($highest_cookie_allowed_level >= 2): ?>
                         <div class="cookie-modal__checkbox__wrapper">
                             <input class="cookie-modal__checkbox" id="allow-cookies-check2" type="checkbox" <?php if( is_cookies_allowed_level(2) || is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(2)}else{allowCookies(1)};">
-                            <label class="cookie-modal__label" for="allow-cookies-check2"><?php esc_html_e( 'Analytic cookies (user specific)', 'gravity_theme' ); ?></label>
+                            <label class="cookie-modal__label" for="allow-cookies-check2"><?php esc_html_e( 'Analytic cookies (user specific)', 'cookies-allowed' ); ?></label>
                         </div>
                     <?php endif; ?>
                     <?php if($highest_cookie_allowed_level == 3): ?>
                         <div class="cookie-modal__checkbox__wrapper">
                             <input class="cookie-modal__checkbox" id="allow-cookies-check3" type="checkbox" <?php if( is_cookies_allowed_level(3) ) echo('checked') ?> onclick="if(this.checked){allowCookies(3)}else{allowCookies(2)};">
-                            <label class="cookie-modal__label" for="allow-cookies-check3"><?php esc_html_e( 'Marketing & Advertising cookies', 'gravity_theme' ); ?></label>
+                            <label class="cookie-modal__label" for="allow-cookies-check3"><?php esc_html_e( 'Marketing & Advertising cookies', 'cookies-allowed' ); ?></label>
                         </div>
                     <?php endif; ?>
                     </div>
                     <div class="cookie-modal__entry cookie-modal__buttons">
-                        <button class="cookie__button cookie__button--large cookie__button--success" onclick="toggleCookieModal();"><?php esc_html_e( 'Save', 'gravity_theme' ); ?></button>
-                        <button class="cookie__button cookie__button--large cookie__button--ghost js-cookie-modal" onclick="allowCookies(<?php echo $previous_cookie_level ?>);"><?php esc_html_e( 'Cancel', 'gravity_theme' ); ?></button>
+                        <button class="cookie__button cookie__button--large cookie__button--success" onclick="toggleCookieModal();"><?php esc_html_e( 'Save', 'cookies-allowed' ); ?></button>
+                        <button class="cookie__button cookie__button--large cookie__button--ghost js-cookie-modal" onclick="allowCookies(<?php echo $previous_cookie_level ?>);"><?php esc_html_e( 'Cancel', 'cookies-allowed' ); ?></button>
                     </div>
                 </div>
             </div>
