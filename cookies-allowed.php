@@ -229,17 +229,20 @@ function get_cookies_allowed_level(){
 *   expected return:
 *   usage:
 */
-if(function_exists('acf_add_options_page')){
-  acf_add_options_page(array(
-    'page_title'    => 'Cookie Opties',
-    'menu_title'    => 'Cookie Opties',
-    'menu_slug'     => 'cookie-options',
-    'position'      => false,
-    'icon_url'      => 'dashicons-art',
-    'redirect'      => false,
-  ));
+// Add Options Page
+add_action( 'init', 'acf_add_cookie_options_page' );
+function acf_add_cookie_options_page() {
+  if( function_exists('acf_add_options_page') ) {
+    //wp_die( 'pffffff!' );
+    acf_add_options_page(array(
+      'page_title'    => 'Cookie Opties',
+      'menu_title'    => 'Cookie Opties',
+      'menu_slug'     => 'cookie-options',
+      'icon_url'      => 'dashicons-art',
+      'redirect'      => false,
+    ));
+  }
 }
-
 
 
 /*
