@@ -195,7 +195,6 @@ function install_and_activate_plugins(){
 // Add ACF json files for the back-end cookie settings
 add_filter('acf/settings/load_json', 'my_acf_json_cookies_allowed');
 function my_acf_json_cookies_allowed( $paths ) {
-
     // append path to child theme
     $paths[] = get_stylesheet_directory() . '/includes/cookies-allowed/acf-json';
       //to parent
