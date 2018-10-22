@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 1.2.0
+Version: 1.2.1
 Author: Pepijn Nichting
 Author URI: https://gravity.nl
 */
@@ -46,10 +46,15 @@ function set_cookies_allowed_language_path() {
 */
 
 function gravity_get_available_file_uri($path) {
-    if ( file_exists( get_stylesheet_directory() . '/' . $path )) {
+    if ( file_exists( get_stylesheet_directory() . '/' . $path )) { //child-theme
         $available_path = get_stylesheet_directory_uri() . '/' . $path ;
-    } else {
+    } else if(file_exists( get_template_directory() . '/' . $path )) { //parrent-theme
         $available_path = get_template_directory_uri() . '/' . $path ;
+    } else{ //current file location
+        $current_dir = dirname(__DIR__);
+        $themefolder_path = substr($current_dir, strpos($current_dir, "/themes/") + 8);
+        $themefolder_name = strstr($themefolder_path, '/', true);
+        $available_path   = get_theme_root_uri() . '/' . $themefolder_name .'/'. $path ;
     }
     return $available_path;
 }
@@ -195,10 +200,9 @@ function install_and_activate_plugins(){
 // Add ACF json files for the back-end cookie settings
 add_filter('acf/settings/load_json', 'my_acf_json_cookies_allowed');
 function my_acf_json_cookies_allowed( $paths ) {
-    // append path to child theme
-    $paths[] = get_stylesheet_directory() . '/includes/cookies-allowed/acf-json';
-      //to parent
-    $paths[] = get_template_directory() . '/includes/cookies-allowed/acf-json';
+
+    //Load plugin acf dir
+    $paths[] = dirname(__DIR__).'/cookies-allowed/acf-json';
 
     // return
     return $paths;
