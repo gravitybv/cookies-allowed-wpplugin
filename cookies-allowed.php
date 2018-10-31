@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 1.2.1
+Version: 1.2.2
 Author: Pepijn Nichting
 Author URI: https://gravity.nl
 */

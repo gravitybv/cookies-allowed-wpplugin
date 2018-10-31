@@ -24,12 +24,15 @@ function allowCookies(cookieLevel) {
 
     if(cookieLevel == 1 && previous_cookie_allowed_level != 1){
         jQuery('#cookie-notice').show();
+        jQuery('body').toggleClass('cookie-notice--open', true);
+
         setCookie('cookie_allowed_level', 1, 30);
         jQuery('.cookie-modal').find('#allow-cookies-check2, #allow-cookies-check3').prop('checked', false);
         console.log('cookie_allowed_level is nu gezet op 1');
     }
     if(cookieLevel == 2 && previous_cookie_allowed_level != 2){
         jQuery('#cookie-notice').show();
+        jQuery('body').toggleClass('cookie-notice--open', true);
         //Set cookie
         setCookie('cookie_allowed_level', 2, 30);
 
@@ -49,6 +52,7 @@ function allowCookies(cookieLevel) {
     }
     if(cookieLevel >= highestCookieAllowedLevel){
         jQuery('#cookie-notice').fadeOut( 600 );
+        jQuery('body').toggleClass('cookie-notice--open', false);
         cookiebarOffset(600, '0');
     }
 }
@@ -152,6 +156,7 @@ jQuery(function($){
     if(cookieLevel < highestCookieAllowedLevel) {
         $('#cookie-notice').show();
         cookiebarOffset();
+        $('body').toggleClass('cookie-notice--open', true);
     }
 
     //Check if cookie_allowed_level exists
