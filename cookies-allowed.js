@@ -1,17 +1,17 @@
 function setCookie(cookiename, cookievalue, exdays) {
     var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+d.toUTCString();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
     document.cookie = cookiename + "=" + cookievalue + "; " + expires + "; path=/";
 }
 
 function getCookie(cookiename) {
     var name = cookiename + "=";
     var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
+    for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
     }
     return "";
 }
@@ -20,9 +20,9 @@ function getCookie(cookiename) {
 function allowCookies(cookieLevel) {
     jQuery(window).unbind('scroll', handleCookieScrollEvent);
     previous_cookie_allowed_level = getCookie('cookie_allowed_level');
-    highestCookieAllowedLevel     = jQuery('#cookie-notice').data('highest-cookie-allowed-level');
+    highestCookieAllowedLevel = jQuery('#cookie-notice').data('highest-cookie-allowed-level');
 
-    if(cookieLevel == 1 && previous_cookie_allowed_level != 1){
+    if (cookieLevel == 1 && previous_cookie_allowed_level != 1) {
         jQuery('#cookie-notice').show();
         jQuery('body').toggleClass('cookie-notice--open', true);
 
@@ -30,7 +30,7 @@ function allowCookies(cookieLevel) {
         jQuery('.cookie-modal').find('#allow-cookies-check2, #allow-cookies-check3').prop('checked', false);
         console.log('cookie_allowed_level is nu gezet op 1');
     }
-    if(cookieLevel == 2 && previous_cookie_allowed_level != 2){
+    if (cookieLevel == 2 && previous_cookie_allowed_level != 2) {
         jQuery('#cookie-notice').show();
         jQuery('body').toggleClass('cookie-notice--open', true);
         //Set cookie
@@ -39,10 +39,10 @@ function allowCookies(cookieLevel) {
         //hide level 1 notifcation
         jQuery('.cookie-modal').find('#allow-cookies-check2').prop('checked', true);
         jQuery('.cookie-modal').find('#allow-cookies-check3').prop('checked', false);
-        jQuery('#cookie-notice').find('#cookie-notification-level-2').fadeOut( 600 );
+        jQuery('#cookie-notice').find('#cookie-notification-level-2').fadeOut(600);
         console.log('cookie_allowed_level is nu gezet op 2');
     }
-    if(cookieLevel == 3 && previous_cookie_allowed_level != 3){
+    if (cookieLevel == 3 && previous_cookie_allowed_level != 3) {
         //Set cookie
         setCookie('cookie_allowed_level', 3, 30);
 
@@ -50,28 +50,31 @@ function allowCookies(cookieLevel) {
         jQuery('.cookie-modal').find('#allow-cookies-check2, #allow-cookies-check3').prop('checked', true);
         console.log('cookie_allowed_level is nu gezet op 3');
     }
-    if(cookieLevel >= highestCookieAllowedLevel){
-        jQuery('#cookie-notice').fadeOut( 600 );
+    if (cookieLevel >= highestCookieAllowedLevel) {
+        jQuery('#cookie-notice').fadeOut(600);
         jQuery('body').toggleClass('cookie-notice--open', false);
         cookiebarOffset(600, '0');
     }
 }
 
-function cookiebarOffset(timeoutTime = 1000, pxOffset) {
-    setTimeout(function(){
-        if ( !pxOffset ){
+function cookiebarOffset(timeoutTime, pxOffset) {
+    if (!timeoutTime) {
+        timeoutTime = 1000;
+    }
+    setTimeout(function () {
+        if (!pxOffset) {
             pxOffset = jQuery('.cookie-notice').outerHeight(true);
         }
         //jQuery('html').css('padding-bottom', cookiebarHeight);
-        jQuery('html').animate({ 'padding-bottom' : pxOffset }, "slow");
+        jQuery('html').animate({'padding-bottom': pxOffset}, "slow");
         //console.log('cookiebar offset van ' + pxOffset +' is gedaan na:' + timeoutTime);
     }, timeoutTime);
 }
 
-function toggleCookieModal(){
+function toggleCookieModal() {
     jQuery('body').toggleClass("cookie-modal--open");
-    if(!jQuery('body').hasClass( "cookie-modal--open" ) && jQuery('#cookies-allowed').attr('data-page-reload') === "true"){
-        setTimeout(function(){
+    if (!jQuery('body').hasClass("cookie-modal--open") && jQuery('#cookies-allowed').attr('data-page-reload') === "true") {
+        setTimeout(function () {
             //console.log('RELOAD!');
             location.reload();
         }, 600);
@@ -79,32 +82,32 @@ function toggleCookieModal(){
 }
 
 
-
-var handleCookieScrollEvent = function() {
+var handleCookieScrollEvent = function () {
     //This is just wrong. Check if you actualy scrolled, not if you load the page with an offset
-    if( !(getCookie('cookie_allowed_level') >= 2) && jQuery(window).scrollTop() > 200) {
+    if (!(getCookie('cookie_allowed_level') >= 2) && jQuery(window).scrollTop() > 200) {
         allowCookies(2);
         //console.log('je hebt gescrollet');
     }
 }
-if( !(getCookie('cookie_allowed_level') >= 1) && document.referrer.indexOf(window.location.hostname) != -1){
+
+if (!(getCookie('cookie_allowed_level') >= 1) && document.referrer.indexOf(window.location.hostname) != -1) {
     var referrer = document.referrer;
     //console.log('je kwam van:' + referrer);
     allowCookies(1);
 }
 
 jQuery.post(
-    ajaxUrl.url,{
+    ajaxUrl.url, {
         'action': 'cookies_allowed_html',
     },
-    function( response ) {
+    function (response) {
         //console.log('load cookie html: ' + response);
         jQuery('#cookies-allowed').replaceWith(response);
 
-        cookieLevel                 = getCookie('cookie_allowed_level');
-        highestCookieAllowedLevel   = jQuery('#cookie-notice').data('highest-cookie-allowed-level');
+        cookieLevel = getCookie('cookie_allowed_level');
+        highestCookieAllowedLevel = jQuery('#cookie-notice').data('highest-cookie-allowed-level');
 
-        if(cookieLevel < highestCookieAllowedLevel){
+        if (cookieLevel < highestCookieAllowedLevel) {
             jQuery('#cookie-notice').show();
             cookiebarOffset();
         }
@@ -112,71 +115,69 @@ jQuery.post(
 );
 
 jQuery.post(
-    ajaxUrl.url,{
+    ajaxUrl.url, {
         'action': 'get_cookies_allowed_scripts',
     },
-    function( response ) {
+    function (response) {
         var responseJSON = JSON.parse(response);
 
         var header_scripts = '';
         var footer_scripts = '';
 
-        if (responseJSON.header)
-        {
+        if (responseJSON.header) {
             for (var i = 0; i < responseJSON.header.length; i++) {
                 header_scripts += responseJSON.header[i] + "\n";
             }
         }
-        if (responseJSON.footer)
-        {
+        if (responseJSON.footer) {
             for (var i = 0; i < responseJSON.footer.length; i++) {
-                if(responseJSON.footer[i]) footer_scripts += responseJSON.footer[i] + "\n";
+                if (responseJSON.footer[i]) footer_scripts += responseJSON.footer[i] + "\n";
             }
         }
 
         jQuery('head').append(header_scripts);
         jQuery('#cookies-allowed-footer-scripts').html(footer_scripts);
-    },
+    }
 );
 
 
-jQuery(function($){
-    cookieLevel                 = getCookie('cookie_allowed_level');
-    highestCookieAllowedLevel   = $('#cookie-notice').data('highest-cookie-allowed-level');
+jQuery(function ($) {
+    cookieLevel = getCookie('cookie_allowed_level');
+    highestCookieAllowedLevel = $('#cookie-notice').data('highest-cookie-allowed-level');
     //Scroll check
-    if( !(cookieLevel >= 2) ) {
+    if (!(cookieLevel >= 2)) {
         //$(window).bind('scroll', handleCookieScrollEvent);
     }
 
     //check if level 2 notification is to be showed
-    if( cookieLevel == 2){
+    if (cookieLevel == 2) {
     }
 
     //Check if level 3 cookies are used and if not yet accepted show the banner
-    if(cookieLevel < highestCookieAllowedLevel) {
+    if (cookieLevel < highestCookieAllowedLevel) {
         $('#cookie-notice').show();
         cookiebarOffset();
         $('body').toggleClass('cookie-notice--open', true);
     }
 
     //Check if cookie_allowed_level exists
-/*
-    if( !(cookieLevel >= 1)) {
-        console.log('cookie_allowed_level bestond nog niet');
-        $('#cookie-notice').show();
-        allowCookies(1);
-    }
-*/
+    /*
+        if( !(cookieLevel >= 1)) {
+            console.log('cookie_allowed_level bestond nog niet');
+            $('#cookie-notice').show();
+            allowCookies(1);
+        }
+    */
 
     //Click handler accept level 3 cookies
-/*
-    $('#cookie-bar').on('click', '.allow-cookie-level-3', function(e){
-        e.preventDefault();
-        allowCookies(3);
-        location.reload();
-    });
-*/
-    $('html').on('click', '.js-cookie-modal', function(e) {
+    /*
+        $('#cookie-bar').on('click', '.allow-cookie-level-3', function(e){
+            e.preventDefault();
+            allowCookies(3);
+            location.reload();
+        });
+    */
+    $('html').on('click', '.js-cookie-modal', function (e) {
         e.preventDefault();
         toggleCookieModal();
     });

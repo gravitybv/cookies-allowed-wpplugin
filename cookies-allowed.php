@@ -41,14 +41,14 @@ function set_cookies_allowed_language_path() {
 */
 
 function gravity_get_available_file_uri( $path ) {
-	$file_name = array_slice( explode( '/', rtrim( $path, '/' ) ), - 1 )[ 0 ];
+	$file_name = array_slice( explode( '/', rtrim( $path, '/' ) ), - 1 )[0];
 
-	if ( file_exists( plugin_dir_path( __FILE__ ) . $file_name ) ) {
-		$available_path = plugin_dir_url( __FILE__ ) . $file_name;
-	} elseif ( file_exists( get_stylesheet_directory() . '/' . $path ) ) { //child-theme
+	if ( file_exists( get_stylesheet_directory() . '/' . $path ) ) { //child-theme
 		$available_path = get_stylesheet_directory_uri() . '/' . $path;
 	} elseif ( file_exists( get_template_directory() . '/' . $path ) ) { //parrent-theme
 		$available_path = get_template_directory_uri() . '/' . $path;
+	} elseif ( file_exists( plugin_dir_path( __FILE__ ) . $file_name ) ) {
+		$available_path = plugin_dir_url( __FILE__ ) . $file_name;
 	} else { //current file location
 		$current_dir      = dirname( __DIR__ );
 		$themefolder_path = substr( $current_dir, strpos( $current_dir, "/themes/" ) + 8 );
@@ -124,7 +124,7 @@ function set_footer_script_wrapper() {
 *   usage: is_cookies_allowed_level(3)
 */
 function is_cookies_allowed_level( $cookie_allowed_level = 1 ) {
-	if ( isset( $_COOKIE[ 'cookie_allowed_level' ] ) && $_COOKIE[ 'cookie_allowed_level' ] == $cookie_allowed_level ) :
+	if ( isset( $_COOKIE['cookie_allowed_level'] ) && $_COOKIE['cookie_allowed_level'] == $cookie_allowed_level ) :
 		return true;
 	endif;
 
@@ -142,34 +142,34 @@ function get_cookies_allowed_scripts() {
 	$scripts = [];
 
 	// Script to be loaded before any cookie check
-	$scripts[ "header" ][] = get_field( 'cookies_allowed_header_scripts_before_all', 'options' );
-	$scripts[ "footer" ][] = get_field( 'cookies_allowed_footer_scripts_before_all', 'options' );
+	$scripts["header"][] = get_field( 'cookies_allowed_header_scripts_before_all', 'options' );
+	$scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_before_all', 'options' );
 
 	if ( get_cookies_allowed_level() >= 0 ) {
 		//$scripts["header"][] = locate_template('parts/cookies_allowed_header_scripts.php');
-		$scripts[ "header" ][] = get_field( 'cookies_allowed_header_scripts_1', 'options' );
+		$scripts["header"][] = get_field( 'cookies_allowed_header_scripts_1', 'options' );
 
 		//$scripts["footer"][] = locate_template('parts/cookies_allowed_footer_scripts.php');
-		$scripts[ "footer" ][] = get_field( 'cookies_allowed_footer_scripts_1', 'options' );
+		$scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_1', 'options' );
 	}
 	if ( get_cookies_allowed_level() >= 2 ) {
 		//$scripts["header"][] = locate_template('parts/cookies_allowed_header_scripts.php');
-		$scripts[ "header" ][] = get_field( 'cookies_allowed_header_scripts_2', 'options' );
+		$scripts["header"][] = get_field( 'cookies_allowed_header_scripts_2', 'options' );
 
 		//$scripts["footer"][] = locate_template('parts/cookies_allowed_footer_scripts.php');
-		$scripts[ "footer" ][] = get_field( 'cookies_allowed_footer_scripts_2', 'options' );
+		$scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_2', 'options' );
 	}
 	if ( get_cookies_allowed_level() >= 3 ) {
 		//$scripts["header"][] = locate_template('parts/cookies_allowed_header_scripts.php');
-		$scripts[ "header" ][] = get_field( 'cookies_allowed_header_scripts_3', 'options' );
+		$scripts["header"][] = get_field( 'cookies_allowed_header_scripts_3', 'options' );
 
 		//$scripts["footer"][] = locate_template('parts/cookies_allowed_footer_scripts.php');
-		$scripts[ "footer" ][] = get_field( 'cookies_allowed_footer_scripts_3', 'options' );
+		$scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_3', 'options' );
 	}
 
 	// Script to be loaded after any cookie check
-	$scripts[ "header" ][] = get_field( 'cookies_allowed_header_scripts_after_all', 'options' );
-	$scripts[ "footer" ][] = get_field( 'cookies_allowed_footer_scripts_after_all', 'options' );
+	$scripts["header"][] = get_field( 'cookies_allowed_header_scripts_after_all', 'options' );
+	$scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_after_all', 'options' );
 
 	//         print_r($scripts);
 	//wp_send_json($scripts);
@@ -214,8 +214,8 @@ function my_acf_json_cookies_allowed( $paths ) {
 *   usage: get_cookies_allowed_level()
 */
 function get_cookies_allowed_level() {
-	if ( isset( $_COOKIE[ 'cookie_allowed_level' ] ) ):
-		return $_COOKIE[ 'cookie_allowed_level' ];
+	if ( isset( $_COOKIE['cookie_allowed_level'] ) ):
+		return $_COOKIE['cookie_allowed_level'];
 	endif;
 
 	return 0;
@@ -263,14 +263,16 @@ function get_cookies_allowed_html() {
 	$default_cookie_modal_text = sprintf( __( '<h4>What are cookies?</h4><p>Cookies are small files that are placed by us on your computer, tablet or smartphone in order to use a website properly. Some cookies are necessary for optimal use of the website. Some cookies are extra.</p><h4>Manage your cookie settings</h4><p>Functional cookies are needed to use the website, which is why they are always on. For an optimal online experience, we recommend to enable additional cookies</p><p>More information about the different types of cookies and their effect can be found in our <a href="%s">Cookie Policy</a> page.</p>', 'cookies-allowed' ), $policy_page_url );
 
 	$acf_cookie_notice_text     = get_field( 'cookie_notice_text', 'options' );
-	$default_cookie_notice_text = sprintf( __( '<p> %s uses cookies to optimize your experience on this website. By using this website you automatically agree to the use of functional cookies and anonymous Analytic cookies.</p>', 'cookies-allowed' ), $_SERVER[ "SERVER_NAME" ] );
+	$default_cookie_notice_text = sprintf( __( '<p> %s uses cookies to optimize your experience on this website. By using this website you automatically agree to the use of functional cookies and anonymous Analytic cookies.</p>', 'cookies-allowed' ), $_SERVER["SERVER_NAME"] );
 
 	$acf_highest_cookie_notice_text     = get_field( 'highest_cookie_notice_text', 'options' );
 	$default_highest_cookie_notice_text = __( '<p>We also use user specific analytic and marketing cookies, by clicking on \'Allow cookies\' you also agree to the use of these cookies. Go to <a href="#" class="js-cookie-modal"> Settings </a> to manage your cookies on this website.</p>', 'cookies-allowed' );
 
 	?>
-    <div id="cookies-allowed" data-page-reload="<?php echo get_field( 'cookies_allowed_reload_page', 'options' ) ? 'true' : 'false'; ?>">
-        <div id="cookie-notice" class="cookie-notice" data-highest-cookie-allowed-level="<?php echo $highest_cookie_allowed_level ?>">
+    <div id="cookies-allowed"
+         data-page-reload="<?php echo get_field( 'cookies_allowed_reload_page', 'options' ) ? 'true' : 'false'; ?>">
+        <div id="cookie-notice" class="cookie-notice"
+             data-highest-cookie-allowed-level="<?php echo $highest_cookie_allowed_level ?>">
             <div class="cookie-notice__container">
                 <div class="cookie-notice__wrapper">
                     <div class="cookie-notice__content">
@@ -283,9 +285,11 @@ function get_cookies_allowed_html() {
 						<?php endif; ?>
                     </div>
                     <div class="cookie-notice__buttons">
-                        <button class="cookie__button cookie__button--opacity" onclick="allowCookies(<?php echo $highest_cookie_allowed_level ?>);"><?php esc_html_e( 'Allow cookies', 'cookies-allowed' ); ?></button>
+                        <button class="cookie__button cookie__button--opacity"
+                                onclick="allowCookies(<?php echo $highest_cookie_allowed_level ?>);"><?php esc_html_e( 'Allow cookies', 'cookies-allowed' ); ?></button>
 						<?php if ( get_cookies_allowed_level() < 1 ): ?>
-                            <button class="cookie__button" onclick="toggleCookieModal();"><?php esc_html_e( 'Settings', 'cookies-allowed' ); ?></button>
+                            <button class="cookie__button"
+                                    onclick="toggleCookieModal();"><?php esc_html_e( 'Settings', 'cookies-allowed' ); ?></button>
 						<?php endif; ?>
                     </div>
                 </div>
@@ -303,27 +307,37 @@ function get_cookies_allowed_html() {
                     <div class="cookie-modal__entry">
                         <h4><?php esc_html_e( 'Cookie types:', 'cookies-allowed' ); ?></h4>
                         <div class="cookie-modal__checkbox__wrapper">
-                            <input class="cookie-modal__checkbox" id="allow-cookies-check1" type="checkbox" checked="checked" disabled onclick="allowCookies(1);">
-                            <label class="cookie-modal__label" for="allow-cookies-check1"><?php esc_html_e( 'Functional & Analytic cookies (anonymous)', 'cookies-allowed' ); ?></label>
+                            <input class="cookie-modal__checkbox" id="allow-cookies-check1" type="checkbox"
+                                   checked="checked" disabled onclick="allowCookies(1);">
+                            <label class="cookie-modal__label"
+                                   for="allow-cookies-check1"><?php esc_html_e( 'Functional & Analytic cookies (anonymous)', 'cookies-allowed' ); ?></label>
                         </div>
 						<?php if ( $highest_cookie_allowed_level >= 2 ): ?>
                             <div class="cookie-modal__checkbox__wrapper">
-                                <input class="cookie-modal__checkbox" id="allow-cookies-check2" type="checkbox" <?php if ( is_cookies_allowed_level( 2 ) || is_cookies_allowed_level( 3 ) )
-									echo( 'checked' ) ?> onclick="if(this.checked){allowCookies(2)}else{allowCookies(1)};">
-                                <label class="cookie-modal__label" for="allow-cookies-check2"><?php esc_html_e( 'Analytic cookies (user specific)', 'cookies-allowed' ); ?></label>
+                                <input class="cookie-modal__checkbox" id="allow-cookies-check2"
+                                       type="checkbox" <?php if ( is_cookies_allowed_level( 2 ) || is_cookies_allowed_level( 3 ) )
+									echo( 'checked' ) ?>
+                                       onclick="if(this.checked){allowCookies(2)}else{allowCookies(1)};">
+                                <label class="cookie-modal__label"
+                                       for="allow-cookies-check2"><?php esc_html_e( 'Analytic cookies (user specific)', 'cookies-allowed' ); ?></label>
                             </div>
 						<?php endif; ?>
 						<?php if ( $highest_cookie_allowed_level == 3 ): ?>
                             <div class="cookie-modal__checkbox__wrapper">
-                                <input class="cookie-modal__checkbox" id="allow-cookies-check3" type="checkbox" <?php if ( is_cookies_allowed_level( 3 ) )
-									echo( 'checked' ) ?> onclick="if(this.checked){allowCookies(3)}else{allowCookies(2)};">
-                                <label class="cookie-modal__label" for="allow-cookies-check3"><?php esc_html_e( 'Marketing & Advertising cookies', 'cookies-allowed' ); ?></label>
+                                <input class="cookie-modal__checkbox" id="allow-cookies-check3"
+                                       type="checkbox" <?php if ( is_cookies_allowed_level( 3 ) )
+									echo( 'checked' ) ?>
+                                       onclick="if(this.checked){allowCookies(3)}else{allowCookies(2)};">
+                                <label class="cookie-modal__label"
+                                       for="allow-cookies-check3"><?php esc_html_e( 'Marketing & Advertising cookies', 'cookies-allowed' ); ?></label>
                             </div>
 						<?php endif; ?>
                     </div>
                     <div class="cookie-modal__entry cookie-modal__buttons">
-                        <button class="cookie__button cookie__button--large cookie__button--success" onclick="toggleCookieModal();"><?php esc_html_e( 'Save', 'cookies-allowed' ); ?></button>
-                        <button class="cookie__button cookie__button--large cookie__button--ghost js-cookie-modal" onclick="allowCookies(<?php echo $previous_cookie_level ?>);"><?php esc_html_e( 'Cancel', 'cookies-allowed' ); ?></button>
+                        <button class="cookie__button cookie__button--large cookie__button--success"
+                                onclick="toggleCookieModal();"><?php esc_html_e( 'Save', 'cookies-allowed' ); ?></button>
+                        <button class="cookie__button cookie__button--large cookie__button--ghost js-cookie-modal"
+                                onclick="allowCookies(<?php echo $previous_cookie_level ?>);"><?php esc_html_e( 'Cancel', 'cookies-allowed' ); ?></button>
                     </div>
                 </div>
             </div>
