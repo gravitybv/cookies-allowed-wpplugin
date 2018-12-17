@@ -1,3 +1,14 @@
+#Gebruikd dit stukje code om teksten aan te passen in de cookie melding.
+<?php 
+/**
+ * Translates cookies-allowed 
+ */
+add_action('after_setup_theme', 'overwrite_cookies_allowed_translation');
+function overwrite_cookies_allowed_translation() {
+    load_theme_textdomain('cookies-allowed', get_template_directory() . '/languages');
+}
+?>
+
 #Gebruik in combi met Google tag manager:
 ##Before all header scripts
 <script>
