@@ -27,7 +27,10 @@ add_action( 'init', 'load_cookies_allowed_textdomain' );
 // get the default language
 function get_default_language() {
   global $sitepress;
-  return $sitepress->get_default_language();
+  if(!empty($sitepress)){
+    return $sitepress->get_default_language();
+  }
+  return;
 }
 
 // maybe we stil need this..... for now user the load_cookies_allowed_textdomain function
@@ -139,7 +142,7 @@ function is_cookies_allowed_level( $cookie_allowed_level = 1 ) {
 
 
 
-if (get_default_language() == ICL_LANGUAGE_CODE){
+if (defined('ICL_LANGUAGE_CODE') && get_default_language() == ICL_LANGUAGE_CODE){
   add_filter( 'acf/prepare_field/name=cookies_allowed_default_language_scripts', 'hide_cookies_allowed_acf_field' );
 }
 
