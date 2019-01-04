@@ -24,6 +24,12 @@ function load_cookies_allowed_textdomain() {
 
 add_action( 'init', 'load_cookies_allowed_textdomain' );
 
+// get the default language
+function get_default_language() {
+  global $sitepress;
+  return $sitepress->get_default_language();
+}
+
 // maybe we stil need this..... for now user the load_cookies_allowed_textdomain function
 function set_cookies_allowed_language_path() {
   $plugin_rel_path = locate_template( 'includes/cookies-allowed/languages/', false, false ); /* Relative to WP_PLUGIN_DIR */
@@ -133,19 +139,18 @@ function is_cookies_allowed_level( $cookie_allowed_level = 1 ) {
 
 
 
-add_filter( 'acf/prepare_field/name=cookies_allowed_default_language_scripts', 'my_acf_prepare_field' );
-function my_acf_prepare_field( $field ) {
-  global $sitepress;
+if (get_default_language() == ICL_LANGUAGE_CODE){
+  add_filter( 'acf/prepare_field/name=cookies_allowed_default_language_scripts', 'hide_cookies_allowed_acf_field' );
+}
 
-  if ($sitepress->get_default_language() == ICL_LANGUAGE_CODE){
-    $field['disabled'] = true;
-    $field['readonly'] = true;
-    $field['value'] = false;
+function hide_cookies_allowed_acf_field( $field ) {
+  $field['disabled'] = true;
+  $field['readonly'] = true;
+  $field['value'] = false;
 
-    return false; // diabled get removed by conditional logic
-  }
+  return false; // diabled get removed by conditional logic
 
-  return $field;
+  //return $field;
 }
 
 
@@ -154,16 +159,10 @@ function my_acf_prepare_field( $field ) {
 add_action( 'wp_ajax_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts' );
 add_action( 'wp_ajax_nopriv_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts' );
 function get_cookies_allowed_scripts() {
-  //$my_current_lang = apply_filters( 'wpml_current_language', NULL );
-  //wp_die($my_current_lang); // Returns en, which is correct and what it should be
-  //do_action('wpml_switch_language', $_GET['wpml_lang']); // Here I'm trying to switch the language, but it does not do anything
 
+  //set the language to site default
   if(get_field( 'cookies_allowed_default_language_scripts', 'options' )){
-    //set the language to site default
-    add_filter('acf/settings/current_language',function() {
-         global $sitepress;
-         return $sitepress->get_default_language();
-    });
+    add_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
   }
 
   $scripts = [];
@@ -198,11 +197,9 @@ function get_cookies_allowed_scripts() {
   $scripts["header"][] = get_field( 'cookies_allowed_header_scripts_after_all', 'options' );
   $scripts["footer"][] = get_field( 'cookies_allowed_footer_scripts_after_all', 'options' );
 
+  // reset to original language
   if(get_field( 'cookies_allowed_default_language_scripts', 'options' )){
-    // reset to original language
-    add_filter('acf/settings/current_language',function() {
-         return ICL_LANGUAGE_CODE;
-    });
+    remove_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
   }
 
   //         print_r($scripts);
@@ -286,7 +283,19 @@ function get_cookies_allowed_html() {
   $html = '';
   ob_start();
 
+  if(get_field( 'cookies_allowed_default_language_scripts', 'options' )){
+    //set the language to site default
+    add_filter('acf/settings/current_language', 'get_default_language', 100);
+  }
+
   $highest_cookie_allowed_level = ( get_field( 'highest_cookie_allowed_level', 'options' ) ) ? get_field( 'highest_cookie_allowed_level', 'options' ) : 3;
+
+  if(get_field( 'cookies_allowed_default_language_scripts', 'options' )){
+    // reset to original language
+    remove_filter('acf/settings/current_language', 'get_default_language', 100);
+  }
+
+
   if ( class_exists( 'NumberFormatter' ) ) {
     $numbertoword        = new NumberFormatter( "nl", NumberFormatter::SPELLOUT );
     $highest_cookie_word = $numbertoword->format( $highest_cookie_allowed_level );
