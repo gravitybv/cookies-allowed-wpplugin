@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 1.2.3
+Version: 1.3.0
 Author: Pepijn Nichting
 Author URI: https://gravity.nl
 */
@@ -141,8 +141,8 @@ function is_cookies_allowed_level( $cookie_allowed_level = 1 ) {
 }
 
 
-
-if (defined('ICL_LANGUAGE_CODE') && get_default_language() == ICL_LANGUAGE_CODE){
+// if is default language or if is single language website
+if (defined('ICL_LANGUAGE_CODE') && get_default_language() == ICL_LANGUAGE_CODE || !defined('ICL_LANGUAGE_CODE')){
   add_filter( 'acf/prepare_field/name=cookies_allowed_default_language_scripts', 'hide_cookies_allowed_acf_field' );
 }
 
