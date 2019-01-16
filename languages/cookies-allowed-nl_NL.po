@@ -54,7 +54,7 @@ msgstr "Marketing & Advertentie cookies"
 
 # wpml-name: 097fe6bcdd43f25a0773b7c7e825922f
 msgid "Analytic cookies (user specific)"
-msgstr "Analyse cookies (gebruiker specifiek)"
+msgstr "Analyse cookies (gebruikerspecifiek)"
 
 # wpml-name: f37e6a2415087e79eb816fe816b674b1
 msgid "Functional & Analytic cookies (anonymous)"

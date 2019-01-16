@@ -108,13 +108,40 @@
             "endpoint": 0
         },
         {
+            "key": "field_5c1cbb00aac57",
+            "label": "Gebruik voor deze taal de default scripts",
+            "name": "cookies_allowed_default_language_scripts",
+            "type": "true_false",
+            "instructions": "Ja. Gebruik voor deze taal de zelfde scripts als op de op de standaard taal\r\n<br\/>Nee. Gebruik voor deze taal afwijkende scripts",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 1,
+            "ui_on_text": "Ja",
+            "ui_off_text": "Nee"
+        },
+        {
             "key": "field_5b7fb57b0c85d",
             "label": "BEFORE ALL SCRIPTS",
             "name": "",
             "type": "accordion",
             "instructions": "",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5c1cbb00aac57",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -167,7 +194,15 @@
             "type": "accordion",
             "instructions": "",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5c1cbb00aac57",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -224,6 +259,11 @@
                 [
                     {
                         "field": "field_5b1100960b9d4",
+                        "operator": "!=",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_5c1cbb00aac57",
                         "operator": "!=",
                         "value": "1"
                     }
@@ -287,6 +327,11 @@
                         "field": "field_5b1100960b9d4",
                         "operator": "==",
                         "value": "3"
+                    },
+                    {
+                        "field": "field_5c1cbb00aac57",
+                        "operator": "!=",
+                        "value": "1"
                     }
                 ]
             ],
@@ -342,7 +387,15 @@
             "type": "accordion",
             "instructions": "",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5c1cbb00aac57",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -503,5 +556,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1538566346
+    "modified": 1546435764
 }
