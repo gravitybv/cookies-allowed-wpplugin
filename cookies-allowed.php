@@ -190,7 +190,7 @@ function install_and_activate_plugins() {
 		?>
         <div class="notice notice-warning">
             <h3><?php esc_html_e( 'Cookies Allowed plugin', 'cookies-allowed' ); ?></h3>
-            <p><?php _e( '<a href="' . $plugin_install_url . '">Instaleer acf-code-field</a>, dit is nodig om de cookies allowed backend te laten werken', 'cookies-allowed' ); ?></p>
+            <p><?php _e( '<a href="' . $plugin_install_url . '">Installeer acf-code-field</a>, dit is nodig om de cookies allowed backend te laten werken', 'cookies-allowed' ); ?></p>
         </div>
 		<?php
 	}
