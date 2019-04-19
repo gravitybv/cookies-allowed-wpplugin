@@ -85,7 +85,7 @@ if ( ! is_admin()) {
 function enqueue_cookies_allowed_scripts()
 {
     $language_suffix = null;
-    if (defined('ICL_LANGUAGE_CODE') && ICL_LANGUAGE_CODE != pll_default_language()) {
+    if (defined('ICL_LANGUAGE_CODE') &&function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
         $language_suffix = '_' . ICL_LANGUAGE_CODE;
     }
 
@@ -179,15 +179,19 @@ function get_cookies_allowed_scripts()
 {
 
     $language_suffix = null;
-    if (defined('ICL_LANGUAGE_CODE') && ICL_LANGUAGE_CODE != pll_default_language()) {
+    if (defined('ICL_LANGUAGE_CODE') &&function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
         $language_suffix = '_' . ICL_LANGUAGE_CODE;
     }
 
     $post_id = 'options' . $language_suffix;
 
     //set the language to site default
-    if (get_field('cookies_allowed_default_language_scripts', $post_id)) {
-        add_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
+    if (get_field('cookies_allowed_default_language_scripts', 'options')) {
+        if (defined('ICL_LANGUAGE_CODE') &&function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
+            add_filter('acf/settings/current_language', pll_default_language(), 100);
+        } else {
+            add_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
+        }
     }
 
     $scripts = [];
@@ -293,7 +297,7 @@ function acf_add_cookie_options_page()
     if (function_exists('acf_add_options_page')) {
         //wp_die( 'pffffff!' );
         $language_suffix = null;
-        if (defined('ICL_LANGUAGE_CODE') && ICL_LANGUAGE_CODE != pll_default_language()) {
+        if (defined('ICL_LANGUAGE_CODE') &&function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
             $language_suffix = '_' . ICL_LANGUAGE_CODE;
         }
 
@@ -320,20 +324,20 @@ function get_cookies_allowed_html()
     ob_start();
 
     $language_suffix = null;
-    if (defined('ICL_LANGUAGE_CODE') && ICL_LANGUAGE_CODE != pll_default_language()) {
+    if (defined('ICL_LANGUAGE_CODE') &&function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
         $language_suffix = '_' . ICL_LANGUAGE_CODE;
     }
 
     $post_id = 'options' . $language_suffix;
 
-    if (get_field('cookies_allowed_default_language_scripts', $post_id)) {
+    if (get_field('cookies_allowed_default_language_scripts', 'options')) {
         //set the language to site default
         add_filter('acf/settings/current_language', 'get_default_language', 100);
     }
 
     $highest_cookie_allowed_level = (get_field('highest_cookie_allowed_level', $post_id)) ? get_field('highest_cookie_allowed_level', $post_id) : 3;
 
-    if (get_field('cookies_allowed_default_language_scripts', $post_id)) {
+    if (get_field('cookies_allowed_default_language_scripts', 'options')) {
         // reset to original language
         remove_filter('acf/settings/current_language', 'get_default_language', 100);
     }
