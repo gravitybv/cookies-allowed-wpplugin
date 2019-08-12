@@ -175,8 +175,11 @@ function hide_cookies_allowed_acf_field($field)
 // Load the cookie scripts by AJAX
 add_action('wp_ajax_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts');
 add_action('wp_ajax_nopriv_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts');
+
 function get_cookies_allowed_scripts()
 {
+
+    global $sitepress;
 
     $language_suffix = null;
     if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
@@ -189,8 +192,10 @@ function get_cookies_allowed_scripts()
     if (get_field('cookies_allowed_default_language_scripts', 'options')) {
         if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
             add_filter('acf/settings/current_language', pll_default_language(), 100);
-        } else {
+        } else if ($sitepress) {
             add_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
+        } else {
+            add_filter('acf/settings/current_language', pll_default_language(), 100);
         }
     }
 
@@ -228,7 +233,11 @@ function get_cookies_allowed_scripts()
 
     // reset to original language
     if (get_field('cookies_allowed_default_language_scripts', $post_id)) {
-        remove_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
+        if ($sitepress) {
+            remove_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
+        } else {
+            remove_filter('acf/settings/current_language', pll_default_language(), 100);
+        }
     }
 
     //         print_r($scripts);
