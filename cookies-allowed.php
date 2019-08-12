@@ -127,8 +127,7 @@ add_action('wp_ajax_nopriv_cookies_allowed_html', 'cookies_allowed_html');
 add_action('wp_footer', 'cookies_allowed_html');
 function cookies_allowed_html()
 {
-    //include(locate_template('parts/cookies-allowed.php'));
-    echo(get_cookies_allowed_html());
+    echo get_cookies_allowed_html();
     if (wp_doing_ajax()) {
         die();
     }
@@ -327,12 +326,11 @@ function acf_add_cookie_options_page()
 *   expected return: cookie html
 *   usage:
 */
-function get_cookies_allowed_html()
+function get_cookies_allowed_html($language_suffix = null)
 {
     $html = '';
     ob_start();
 
-    $language_suffix = null;
     if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
         $language_suffix = '_' . ICL_LANGUAGE_CODE;
     }
@@ -357,6 +355,7 @@ function get_cookies_allowed_html()
     }
     $policy_page_url = '#';
     $previous_cookie_level = get_cookies_allowed_level();
+
     $acf_cookie_modal_text = get_field('cookie_modal_text', $post_id);
     $default_cookie_modal_text = sprintf(__('<h4>What are cookies?</h4><p>Cookies are small files that are placed by us on your computer, tablet or smartphone in order to use a website properly. Some cookies are necessary for optimal use of the website. Some cookies are extra.</p><h4>Manage your cookie settings</h4><p>Functional cookies are needed to use the website, which is why they are always on. For an optimal online experience, we recommend to enable additional cookies</p><p>More information about the different types of cookies and their effect can be found in our <a href="%s">Cookie Policy</a> page.</p>', 'cookies-allowed'), $policy_page_url);
 
