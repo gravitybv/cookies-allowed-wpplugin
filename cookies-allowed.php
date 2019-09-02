@@ -92,7 +92,7 @@ function enqueue_cookies_allowed_scripts()
     $post_id = 'options' . $language_suffix;
 
     //JS
-    wp_register_script('cookies-allowed-js', gravity_get_available_file_uri('includes/cookies-allowed/cookies-allowed.js'), ['jquery'], '1.1.0', true);
+    wp_register_script('cookies-allowed-js', gravity_get_available_file_uri('includes/cookies-allowed/cookies-allowed.js'), ['jquery'], '1.1.0', false);
     wp_enqueue_script('cookies-allowed-js');
 
     // CSS
