@@ -31,6 +31,8 @@ function get_default_language()
     global $sitepress;
     if (!empty($sitepress)) {
         return $sitepress->get_default_language();
+    } else{
+      return pll_default_language();
     }
 
     return;
