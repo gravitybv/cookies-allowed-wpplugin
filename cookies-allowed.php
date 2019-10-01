@@ -38,7 +38,38 @@ function get_default_language()
     return;
 }
 
-// maybe we stil need this..... for now user the load_cookies_allowed_textdomain function
+// set and reset default language for getting acf fields
+function set_acf_default_language($set = true){
+
+    global $sitepress;
+
+    if($set === true){
+        if ($sitepress) {
+            $language = $sitepress->get_default_language();
+            add_filter('acf/settings/current_language', $language, 100);
+        } elseif( function_exists('pll_current_language')) {
+            $language = pll_default_language();
+            add_filter('acf/settings/current_language', $language, 100);
+        } else{
+            $language = acf_get_setting('default_language');
+            add_filter( 'acf/settings/current_language',  '__return_false' );
+        }
+    } else {
+        if ($sitepress) {
+            remove_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
+        } elseif( function_exists('pll_current_language')) {
+            remove_filter('acf/settings/current_language', pll_default_language(), 100);
+        } else{
+            remove_filter( 'acf/settings/current_language',  '__return_false' );
+        }
+        $language = ICL_LANGUAGE_CODE;
+    }
+    return $language;
+}
+
+
+
+// maybe we stil need this..... for now use the load_cookies_allowed_textdomain function
 function set_cookies_allowed_language_path()
 {
     $plugin_rel_path = locate_template('includes/cookies-allowed/languages/', false, false); /* Relative to WP_PLUGIN_DIR */
@@ -86,22 +117,19 @@ if (!is_admin()) {
 }
 function enqueue_cookies_allowed_scripts()
 {
-    $language_suffix = null;
-    if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
-        $language_suffix = '_' . ICL_LANGUAGE_CODE;
-    }
-
-    $post_id = 'options' . $language_suffix;
 
     //JS
     wp_register_script('cookies-allowed-js', gravity_get_available_file_uri('includes/cookies-allowed/cookies-allowed.js'), ['jquery'], '1.1.0', false);
     wp_enqueue_script('cookies-allowed-js');
 
     // CSS
-    wp_register_style('cookies-allowed-default-css', gravity_get_available_file_uri('includes/cookies-allowed/cookies-allowed-default.css'), ['jquery'], null, 'all');
-    if (get_field('cookies_allowed_default_css', $post_id)) {
-        wp_enqueue_style('cookies-allowed-default-css');
-    }
+    wp_register_style('cookies-allowed-default-css', gravity_get_available_file_uri('includes/cookies-allowed/cookies-allowed-default.css'), '', null, 'all');
+
+    set_acf_default_language(); //set to default language
+      if (get_field('cookies_allowed_default_css', 'options')) {
+          wp_enqueue_style('cookies-allowed-default-css');
+      }
+    set_acf_default_language(false);//reset to current language
 
     // If wpml = active add the language to the ajax url
     if (in_array('sitepress-multilingual-cms/sitepress.php', get_option('active_plugins'))) {
@@ -177,69 +205,50 @@ function hide_cookies_allowed_acf_field($field)
 add_action('wp_ajax_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts');
 add_action('wp_ajax_nopriv_get_cookies_allowed_scripts', 'get_cookies_allowed_scripts');
 
+
+
+
+
 function get_cookies_allowed_scripts()
 {
 
-    global $sitepress;
-
-    $language_suffix = null;
-    if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
-        $language_suffix = '_' . ICL_LANGUAGE_CODE;
-    }
-
-    $post_id = 'options' . $language_suffix;
-
     //set the language to site default
-    if (get_field('cookies_allowed_default_language_scripts', 'options')) {
-        if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
-            add_filter('acf/settings/current_language', pll_default_language(), 100);
-        } else if ($sitepress) {
-            add_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
-        } else {
-            add_filter('acf/settings/current_language', pll_default_language(), 100);
-        }
-    }
-
+    if (get_field('cookies_allowed_default_language_scripts', 'options')) set_acf_default_language();
     $scripts = [];
 
     // Script to be loaded before any cookie check
-    $scripts["header"][] = get_field('cookies_allowed_header_scripts_before_all', $post_id);
-    $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_before_all', $post_id);
+    $scripts["header"][] = get_field('cookies_allowed_header_scripts_before_all', 'options');
+    $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_before_all', 'options');
 
     if (get_cookies_allowed_level() >= 0) {
         //$scripts["header"][] = locate_template('parts/cookies_allowed_header_scripts.php');
-        $scripts["header"][] = get_field('cookies_allowed_header_scripts_1', $post_id);
+        $scripts["header"][] = get_field('cookies_allowed_header_scripts_1', 'options');
 
         //$scripts["footer"][] = locate_template('parts/cookies_allowed_footer_scripts.php');
-        $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_1', $post_id);
+        $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_1', 'options');
     }
     if (get_cookies_allowed_level() >= 2) {
         //$scripts["header"][] = locate_template('parts/cookies_allowed_header_scripts.php');
-        $scripts["header"][] = get_field('cookies_allowed_header_scripts_2', $post_id);
+        $scripts["header"][] = get_field('cookies_allowed_header_scripts_2', 'options');
 
         //$scripts["footer"][] = locate_template('parts/cookies_allowed_footer_scripts.php');
-        $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_2', $post_id);
+        $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_2', 'options');
     }
     if (get_cookies_allowed_level() >= 3) {
         //$scripts["header"][] = locate_template('parts/cookies_allowed_header_scripts.php');
-        $scripts["header"][] = get_field('cookies_allowed_header_scripts_3', $post_id);
+        $scripts["header"][] = get_field('cookies_allowed_header_scripts_3', 'options');
 
         //$scripts["footer"][] = locate_template('parts/cookies_allowed_footer_scripts.php');
-        $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_3', $post_id);
+        $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_3', 'options');
     }
 
     // Script to be loaded after any cookie check
-    $scripts["header"][] = get_field('cookies_allowed_header_scripts_after_all', $post_id);
-    $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_after_all', $post_id);
+    $scripts["header"][] = get_field('cookies_allowed_header_scripts_after_all', 'options');
+    $scripts["footer"][] = get_field('cookies_allowed_footer_scripts_after_all', 'options');
 
     // reset to original language
-    if (get_field('cookies_allowed_default_language_scripts', $post_id)) {
-        if ($sitepress) {
-            remove_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
-        } else {
-            remove_filter('acf/settings/current_language', pll_default_language(), 100);
-        }
-    }
+    if (get_field('cookies_allowed_default_language_scripts', 'options')) set_acf_default_language(false);
+
 
     //         print_r($scripts);
     //wp_send_json($scripts);
