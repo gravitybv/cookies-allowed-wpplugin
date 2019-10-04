@@ -62,7 +62,7 @@ function set_acf_default_language($set = true){
         } else{
             remove_filter( 'acf/settings/current_language',  '__return_false' );
         }
-        $language = ICL_LANGUAGE_CODE;
+        $language = defined('ICL_LANGUAGE_CODE') ? ICL_LANGUAGE_CODE : '';
     }
     return $language;
 }
