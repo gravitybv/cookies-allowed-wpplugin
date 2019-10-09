@@ -45,20 +45,26 @@ function set_acf_default_language($set = true){
 
     if($set === true){
         if ($sitepress) {
-            $language = $sitepress->get_default_language();
-            add_filter('acf/settings/current_language', $language, 100);
+            add_filter('acf/settings/current_language', function() {
+                return $sitepress->get_default_language();
+            }, 100);
         } elseif( function_exists('pll_current_language')) {
-            $language = pll_default_language();
-            add_filter('acf/settings/current_language', $language, 100);
+            add_filter('acf/settings/current_language', function() {
+                return pll_default_language();
+            }, 100);
         } else{
             $language = acf_get_setting('default_language');
             add_filter( 'acf/settings/current_language',  '__return_false' );
         }
     } else {
         if ($sitepress) {
-            remove_filter('acf/settings/current_language', $sitepress->get_default_language(), 100);
+            remove_filter('acf/settings/current_language', function() {
+                return $sitepress->get_default_language();
+            }, 100);
         } elseif( function_exists('pll_current_language')) {
-            remove_filter('acf/settings/current_language', pll_default_language(), 100);
+            remove_filter('acf/settings/current_language', function() {
+                return pll_default_language();
+            }, 100);
         } else{
             remove_filter( 'acf/settings/current_language',  '__return_false' );
         }
