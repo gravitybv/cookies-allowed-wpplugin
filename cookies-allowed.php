@@ -45,7 +45,7 @@ function set_acf_default_language($set = true){
 
     if($set === true){
         if ($sitepress) {
-            add_filter('acf/settings/current_language', function() {
+            add_filter('acf/settings/current_language', function($sitepress) {
                 return $sitepress->get_default_language();
             }, 100);
         } elseif( function_exists('pll_current_language')) {
@@ -58,7 +58,7 @@ function set_acf_default_language($set = true){
         }
     } else {
         if ($sitepress) {
-            remove_filter('acf/settings/current_language', function() {
+            remove_filter('acf/settings/current_language', function($sitepress) {
                 return $sitepress->get_default_language();
             }, 100);
         } elseif( function_exists('pll_current_language')) {
