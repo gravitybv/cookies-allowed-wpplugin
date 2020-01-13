@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 2.0.0
+Version: 2.1.0
 Author: Pepijn Nichting | G R A V I T Y
 Text Domain: cookies-allowed
 Domain Path: /languages
@@ -14,6 +14,14 @@ if (!class_exists('CookiesAllowed')) {
     {
         function __construct()
         {
+            // Set Plugin Path
+            $this->pluginPath = dirname(__FILE__);
+            $path_array = explode('/wp-content/', $this->pluginPath);
+            $this->pluginRelPath = end($path_array);
+
+            // Set Plugin URL
+            $this->pluginUrl = content_url($this->pluginRelPath);
+
             add_action('init', [$this, 'load_cookies_allowed_textdomain']);
             if (!is_admin()) {
                 add_action('wp_enqueue_scripts', [$this, 'enqueue_cookies_allowed_scripts'], 11);
@@ -39,7 +47,7 @@ if (!class_exists('CookiesAllowed')) {
             $domain = 'cookies-allowed';
             $locale = apply_filters('plugin_locale', get_locale(), $domain);
             $mofile = $domain . '-' . $locale . '.mo';
-            $plugin_path = locate_template('includes/cookies-allowed/languages/', false, false);
+            $plugin_path = $this->pluginPath.'/languages/';
 
             // load from the languages directory first
             load_textdomain($domain, WP_LANG_DIR . '/plugins/' . $mofile);
@@ -47,8 +55,7 @@ if (!class_exists('CookiesAllowed')) {
             // load from plugin lang folder
             load_textdomain($domain, $plugin_path . $mofile);
         }
-
-
+        
         // get the default language
         function cookies_allowed_get_default_language()
         {
@@ -101,44 +108,6 @@ if (!class_exists('CookiesAllowed')) {
             return $language;
         }
 
-
-        // maybe we stil need this..... for now use the load_cookies_allowed_textdomain function
-        //add_action('init', 'set_cookies_allowed_language_path');
-        function set_cookies_allowed_language_path()
-        {
-            $plugin_rel_path = locate_template('includes/cookies-allowed/languages/', false, false); /* Relative to WP_PLUGIN_DIR */
-            echo($plugin_rel_path);
-            load_plugin_textdomain('cookies-allowed', false, $plugin_rel_path);
-        }
-
-
-        /*
-        *   Description: return the url of a file if exists in child, if not return parent file url
-        *   Args: $path relative to theme file path
-        *   Expected return: http://pepijn.local/autovakmeester.nl/wp-content/themes/gravitycore/includes/cookies-allowed/cookies-allowed.js
-        *   Usage: cookies_allowed_get_available_file_uri('includes/cookies-allowed/cookies-allowed.js')
-        */
-
-        function cookies_allowed_get_available_file_uri($path)
-        {
-            $file_name = array_slice(explode('/', rtrim($path, '/')), -1)[0];
-
-            if (file_exists(get_stylesheet_directory() . '/' . $path)) { //child-theme
-                $available_path = get_stylesheet_directory_uri() . '/' . $path;
-            } elseif (file_exists(get_template_directory() . '/' . $path)) { //parrent-theme
-                $available_path = get_template_directory_uri() . '/' . $path;
-            } elseif (file_exists(plugin_dir_path(__FILE__) . $file_name)) {
-                $available_path = plugin_dir_url(__FILE__) . $file_name;
-            } else { //current file location
-                $current_dir = dirname(__DIR__);
-                $themefolder_path = substr($current_dir, strpos($current_dir, "/themes/") + 8);
-                $themefolder_name = strstr($themefolder_path, '/', true);
-                $available_path = get_theme_root_uri() . '/' . $themefolder_name . '/' . $path;
-            }
-
-            return $available_path;
-        }
-
         /*
         *   Description: enqueue cookies_allowed scripts
         *   Args: none
@@ -149,11 +118,11 @@ if (!class_exists('CookiesAllowed')) {
         {
 
             //JS
-            wp_register_script('cookies-allowed-js', $this->cookies_allowed_get_available_file_uri('includes/cookies-allowed/cookies-allowed.js'), ['jquery'], '1.1.0', false);
+            wp_register_script('cookies-allowed-js', $this->pluginUrl . '/assets/js/cookies-allowed.js', ['jquery'], '2.0.0', false);
             wp_enqueue_script('cookies-allowed-js');
 
             // CSS
-            wp_register_style('cookies-allowed-default-css', $this->cookies_allowed_get_available_file_uri('includes/cookies-allowed/cookies-allowed-default.css'), '', null, 'all');
+            wp_register_style('cookies-allowed-default-css', $this->pluginUrl . '/assets/css/cookies-allowed-default.css', '', '2.0.0', 'all');
 
             $this->set_acf_default_language(); //set to default language
             if (get_field('cookies_allowed_default_css', 'options')) {
