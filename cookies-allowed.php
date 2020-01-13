@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 2.1.0
+Version: 2.2.0
 Author: Pepijn Nichting | G R A V I T Y
 Text Domain: cookies-allowed
 Domain Path: /languages
@@ -55,7 +55,7 @@ if (!class_exists('CookiesAllowed')) {
             // load from plugin lang folder
             load_textdomain($domain, $plugin_path . $mofile);
         }
-        
+
         // get the default language
         function cookies_allowed_get_default_language()
         {
@@ -118,11 +118,11 @@ if (!class_exists('CookiesAllowed')) {
         {
 
             //JS
-            wp_register_script('cookies-allowed-js', $this->pluginUrl . '/assets/js/cookies-allowed.js', ['jquery'], '2.0.0', false);
+            wp_register_script('cookies-allowed-js', $this->pluginUrl . '/assets/js/cookies-allowed.js', ['jquery'], '2.2.0', false);
             wp_enqueue_script('cookies-allowed-js');
 
             // CSS
-            wp_register_style('cookies-allowed-default-css', $this->pluginUrl . '/assets/css/cookies-allowed-default.css', '', '2.0.0', 'all');
+            wp_register_style('cookies-allowed-default-css', $this->pluginUrl . '/assets/css/cookies-allowed-default.css', '', '2.2.0', 'all');
 
             $this->set_acf_default_language(); //set to default language
             if (get_field('cookies_allowed_default_css', 'options')) {
@@ -437,4 +437,11 @@ if (!class_exists('CookiesAllowed')) {
     }
 
     new CookiesAllowed();
+
+    require('updater.php');
+    $repo = 'ionlinenl/cookies-allowed-wpplugin';   // name of your repository. This is either "<user>/<repo>" or "<team>/<repo>".
+    $bitbucket_username = 'pepijnnichting';         // your personal BitBucket username
+    $bitbucket_app_pass = '98FcvBxa8tbzJPkfCrag';   // the generated app password with read access
+
+    new \CookiesAllowed\BitbucketWpUpdater\PluginUpdater(__FILE__, $repo, $bitbucket_username, $bitbucket_app_pass);
 }
