@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 2.2.0
+Version: 2.2.1
 Author: Pepijn Nichting | G R A V I T Y
 Text Domain: cookies-allowed
 Domain Path: /languages
@@ -22,6 +22,8 @@ if (!class_exists('CookiesAllowed')) {
             // Set Plugin URL
             $this->pluginUrl = content_url($this->pluginRelPath);
 
+            add_filter('acf/settings/load_json', [$this, 'acf_json_cookies_allowed'], 20); // make sure no get_field() gets called before this hook or else it wont work.
+
             add_action('init', [$this, 'load_cookies_allowed_textdomain']);
             if (!is_admin()) {
                 add_action('wp_enqueue_scripts', [$this, 'enqueue_cookies_allowed_scripts'], 11);
@@ -31,7 +33,6 @@ if (!class_exists('CookiesAllowed')) {
             add_action('wp_footer', [$this, 'cookies_allowed_html']);
             add_action('wp_footer', [$this, 'set_cookies_allowed_footer_script_wrapper']);
             add_action('admin_notices', [$this, 'cookies_allowed_install_and_activate_plugins']);
-            add_filter('acf/settings/load_json', [$this, 'acf_json_cookies_allowed']);
             add_action('init', [$this, 'acf_add_cookies_allowed_options_page']);
 
             // if is default language or if is single language website
