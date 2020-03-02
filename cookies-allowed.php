@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 2.2.2
+Version: 2.2.3
 Author: Pepijn Nichting | G R A V I T Y
 Text Domain: cookies-allowed
 Domain Path: /languages
@@ -15,7 +15,7 @@ if (!class_exists('CookiesAllowed')) {
         function __construct()
         {
             if( !class_exists('acf') ) {
-                exit();
+                return;
             }
             // Set Plugin Path
             $this->pluginPath = dirname(__FILE__);
