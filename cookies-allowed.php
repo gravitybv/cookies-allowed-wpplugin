@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 2.2.3
+Version: 2.2.4
 Author: Pepijn Nichting | G R A V I T Y
 Text Domain: cookies-allowed
 Domain Path: /languages
@@ -31,6 +31,9 @@ if (!class_exists('CookiesAllowed')) {
             if (!is_admin()) {
                 add_action('wp_enqueue_scripts', [$this, 'enqueue_cookies_allowed_scripts'], 11);
             }
+
+            add_action('wp_ajax_get_cookies_allowed_scripts', [$this, 'get_cookies_allowed_scripts']);
+            add_action('wp_ajax_nopriv_get_cookies_allowed_scripts', [$this, 'get_cookies_allowed_scripts']);
             add_action('wp_ajax_cookies_allowed_html', [$this, 'cookies_allowed_html']);
             add_action('wp_ajax_nopriv_cookies_allowed_html', [$this, 'cookies_allowed_html']);
             add_action('wp_footer', [$this, 'cookies_allowed_html']);
