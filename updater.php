@@ -1,176 +1,180 @@
 <?php
-namespace CookiesAllowed\BitbucketWpUpdater;
-// gebaseerd op:https://github.com/maneuver-agency/bitbucket-wp-updater/blob/master/src/PluginUpdater.php
-// dit is mischien een mooiere manier: https://appsaloon.be/blog/wordpress-plugin-updater-via-bitbucket-api-tutorial/
+
+namespace CookiesAllowed\GithubWpUpdater;
 
 /*
-Version: 0.1.0
+Version: 0.2.0
 Author: Pepijn Nichting | G R A V I T Y
 Author URI: https://gravity.nl
 */
 
 class PluginUpdater
 {
-    private $slug;
-    private $pluginData;
-    private $repo;
-    private $pluginFile;
-    private $bitbucketAPIResult;
-    private $bitbucketUsername;
-    private $bitbucketPassword;
+  private $file;
 
-    function __construct($pluginFile, $repo, $bbUsername, $bbPassword)
-    {
-        add_filter("pre_set_site_transient_update_plugins", array($this, "setTransient"));
-        add_filter("plugins_api", array($this, "setPluginInfo"), 10, 3);
-        add_filter("upgrader_post_install", array($this, "postInstall"), 10, 3);
-        add_filter('http_request_args', array($this, 'modifyRequestArgs'), 10, 2);
-        $this->pluginFile = $pluginFile;
-        $this->repo = $repo;
-        $this->bitbucketUsername = $bbUsername;
-        $this->bitbucketPassword = $bbPassword;
-    }
+  private $plugin;
 
-    // Get information regarding our plugin from WordPress
-    private function initPluginData()
-    {
-        $this->slug = plugin_basename($this->pluginFile);
-        $this->pluginData = get_plugin_data($this->pluginFile);
-    }
+  private $basename;
 
-    private function makeRequest($url)
-    {
-        $process = curl_init($url);
-        curl_setopt($process, CURLOPT_USERPWD, sprintf('%s:%s', $this->bitbucketUsername, $this->bitbucketPassword));
-        curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
-        $response = curl_exec($process);
-        curl_close($process);
-        return $response;
-    }
+  private $active;
 
-    // Get information regarding our plugin from GitHub
-    private function getRepoReleaseInfo()
-    {
-        // Only do this once
-        if (!empty($this->bitbucketAPIResult)) {
-            return;
-        }
-        $url = sprintf('https://api.bitbucket.org/2.0/repositories/%s/refs/tags?sort=-target.date', $this->repo);
-        $response = $this->makeRequest($url);
-        if ($response) {
-            $data = json_decode($response);
-            if (isset($data, $data->values) && is_array($data->values)) {
-                $tag = reset($data->values);
-                if (isset($tag->name)) {
-                    $this->bitbucketAPIResult = $tag;
-                }
-            }
-        }
-    }
+  private $username;
 
-    // Push in plugin version information to get the update notification
-    public function setTransient($transient)
-    {
-        // var_dump($transient);exit;
+  private $repository;
 
-        // If we have checked the plugin data before, don't re-check
-        if (empty($transient->checked)) {
-            return $transient;
-        }
-        // Get plugin & GitHub release information
-        $this->initPluginData();
-        $this->getRepoReleaseInfo();
-        if (empty($this->bitbucketAPIResult)) {
-            // Nothing found.
-            return $transient;
-        }
-        $bb_version = str_replace('v', '', $this->bitbucketAPIResult->name);
-        // Check the versions if we need to do an update
-        $doUpdate = version_compare($bb_version, $transient->checked[$this->slug]);
-        // Update the transient to include our updated plugin data
-        if ($doUpdate == 1) {
-            $package = sprintf('https://bitbucket.org/%s/get/%s.zip',
-                $this->repo,
-                $this->bitbucketAPIResult->name
-            );
+  private $authorize_token;
 
-            $obj = new \stdClass();
-            $obj->slug = $this->slug;
-            $obj->new_version = str_replace('v', '', $this->bitbucketAPIResult->name);
-            $obj->url = $this->pluginData["PluginURI"];
-            $obj->package = $package;
-            $obj->compatibility =
-            $transient->response[$this->slug] = $obj;
-        }
-        return $transient;
-    }
+  private $github_response;
 
-    public function getReadmeFile()
-    {
-        $sha = 'HEAD';
-        $url = sprintf('https://bitbucket.org/%s/raw/%s/readme.txt',
-            $this->repo,
-            $sha
+  public function __construct($file)
+  {
+
+    $this->file = $file;
+
+    add_action('admin_init', array($this, 'set_plugin_properties'));
+
+    return $this;
+  }
+
+  public function set_plugin_properties()
+  {
+    $this->plugin = get_plugin_data($this->file);
+    $this->basename = plugin_basename($this->file);
+    $this->active = is_plugin_active($this->basename);
+  }
+
+  public function set_username($username)
+  {
+    $this->username = $username;
+  }
+
+  public function set_repository($repository)
+  {
+    $this->repository = $repository;
+  }
+
+  public function authorize($token)
+  {
+    $this->authorize_token = $token;
+  }
+
+  private function get_repository_info()
+  {
+    if (is_null($this->github_response)) { // Do we have a response?
+      $args = array();
+      $request_uri = sprintf('https://api.github.com/repos/%s/%s/releases', $this->username, $this->repository); // Build URI
+
+      if ($this->authorize_token) { // Is there an access token?
+        $args = array(
+          "headers" => array(
+            "Authorization" => "token {$this->authorize_token}"
+          )
         );
-        $url = sprintf('https://api.bitbucket.org/2.0/repositories/%s/src/HEAD/readme.txt', $this->repo);
-        $response = $this->makeRequest($url);
-        $decode = json_decode($response);
-        // No file found or other error.
-        if ($decode) {
-            return false;
+      }
+
+      $response = json_decode(wp_remote_retrieve_body(wp_remote_get($request_uri, $args)), true); // Get JSON and parse it
+
+      if (is_array($response)) { // If it is an array
+        $response = current($response); // Get the first item
+      }
+
+      if ($this->authorize_token) { // Is there an access token?
+        $response['zipball_url'] = add_query_arg('access_token', $this->authorize_token, $response['zipball_url']); // Update our zip url with token
+      }
+
+      $this->github_response = $response; // Set it to our property
+    }
+  }
+
+  public function initialize()
+  {
+    add_filter('pre_set_site_transient_update_plugins', array($this, 'modify_transient'), 10, 1);
+    add_filter('plugins_api', array($this, 'plugin_popup'), 10, 3);
+    add_filter('upgrader_post_install', array($this, 'after_install'), 10, 3);
+  }
+
+  public function modify_transient($transient)
+  {
+
+    if (property_exists($transient, 'checked')) { // Check if transient has a checked property
+
+      if ($checked = $transient->checked) { // Did Wordpress check for updates?
+        $this->get_repository_info(); // Get the repo info
+
+        $out_of_date = version_compare($this->github_response['tag_name'], $checked[$this->basename], 'gt'); // Check if we're out of date
+
+        if ($out_of_date) {
+
+          $new_files = $this->github_response['zipball_url']; // Get the ZIP
+
+          $slug = current(explode('/', $this->basename)); // Create valid slug
+
+          $plugin = array( // setup our plugin info
+            'url' => $this->plugin["PluginURI"],
+            'slug' => $slug,
+            'package' => $new_files,
+            'new_version' => $this->github_response['tag_name']
+          );
+
+          $transient->response[$this->basename] = (object)$plugin; // Return it in response
         }
-        return $response;
+      }
     }
 
-    public function modifyRequestArgs($args, $url)
-    {
-        if (preg_match('/bitbucket.org(.+)' . str_replace('/', '\/', $this->repo) . '/', $url)) {
-            if (empty($args['headers'])) {
-                $args['headers'] = array();
-            }
-            $args['headers']['Authorization'] = 'Basic ' . base64_encode($this->bitbucketUsername . ':' . $this->bitbucketPassword);
-        }
-        return $args;
+    return $transient; // Return filtered transient
+  }
+
+  public function plugin_popup($result, $action, $args)
+  {
+
+    if (!empty($args->slug)) { // If there is a slug
+
+      if ($args->slug == current(explode('/', $this->basename))) { // And it's our slug
+
+        $this->get_repository_info(); // Get our repo info
+
+        // Set it to an array
+        $plugin = array(
+          'name' => $this->plugin["Name"],
+          'slug' => $this->basename,
+          'requires' => '3.3',
+          'tested' => '4.4.1',
+          'rating' => '100.0',
+          'num_ratings' => '10823',
+          'downloaded' => '14249',
+          'added' => '2016-01-05',
+          'version' => $this->github_response['tag_name'],
+          'author' => $this->plugin["AuthorName"],
+          'author_profile' => $this->plugin["AuthorURI"],
+          'last_updated' => $this->github_response['published_at'],
+          'homepage' => $this->plugin["PluginURI"],
+          'short_description' => $this->plugin["Description"],
+          'sections' => array(
+            'Description' => $this->plugin["Description"],
+            'Updates' => $this->github_response['body'],
+          ),
+          'download_link' => $this->github_response['zipball_url']
+        );
+
+        return (object)$plugin; // Return the data
+      }
+
+    }
+    return $result; // Otherwise return default
+  }
+
+  public function after_install($response, $hook_extra, $result)
+  {
+    global $wp_filesystem; // Get global FS object
+
+    $install_directory = plugin_dir_path($this->file); // Our plugin directory
+    $wp_filesystem->move($result['destination'], $install_directory); // Move files to the plugin dir
+    $result['destination'] = $install_directory; // Set the destination for the rest of the stack
+
+    if ($this->active) { // If it was active
+      activate_plugin($this->basename); // Reactivate
     }
 
-    // Push in plugin version information to display in the details lightbox
-    public function setPluginInfo($res, $action, $args)
-    {
-        $this->initPluginData();
-        if ($action == 'plugin_information' && $args->slug == $this->slug) {
-            $res = new \stdClass();
-            $res->name = $this->pluginData['Name'];
-            $res->slug = $this->slug;
-            $changelog = 'No readme file present in repo.';
-            $readme = $this->getReadmeFile();
-            if ($readme) {
-                $Parsedown = new \Parsedown();
-                $changelog = $Parsedown->text($readme);
-            }
-            $res->sections = [
-                'changelog' => $changelog,
-            ];
-        }
-        return $res;
-    }
-
-    // Perform additional actions to successfully install our plugin
-    public function postInstall($true, $hook_extra, $result)
-    {
-        // Get plugin information
-        $this->initPluginData();
-        // Remember if our plugin was previously activated
-        $wasActivated = is_plugin_active($this->slug);
-        // Since we are hosted in GitHub, our plugin folder would have a dirname of
-        // reponame-tagname change it to our original one:
-        global $wp_filesystem;
-        $pluginFolder = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . dirname($this->slug);
-        $wp_filesystem->move($result['destination'], $pluginFolder);
-        $result['destination'] = $pluginFolder;
-        // Re-activate plugin if needed
-        if ($wasActivated) {
-            $activate = activate_plugin($this->slug);
-        }
-        return $result;
-    }
+    return $result;
+  }
 }
