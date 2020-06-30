@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 3.0.1
+Version: 3.0.2
 Author: Pepijn Nichting | G R A V I T Y
 Text Domain: cookies-allowed
 Domain Path: /languages
@@ -449,7 +449,7 @@ if (!class_exists('CookiesAllowed')) {
         include_once('updater.php');
     }
 
-    $updater = new \CookiesAllowed\GithubWpUpdater\PluginUpdater(__FILE__); // instantiate our class
+    $updater = new \GithubWpUpdater\PluginUpdater(__FILE__); // instantiate our class
     $updater->set_username('gravitybv'); // set username
     $updater->set_repository('cookies-allowed-wpplugin'); // set repo
     //$updater->authorize('97a551d3e4a4b59a4c00dbb5bfc5c3226b065fee'); // set repo

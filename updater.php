@@ -1,9 +1,9 @@
 <?php
 
-namespace CookiesAllowed\GithubWpUpdater;
+namespace GithubWpUpdater;
 
 /*
-Version: 0.2.0
+Version: 0.2.1
 Author: Pepijn Nichting | G R A V I T Y
 Author URI: https://gravity.nl
 */
