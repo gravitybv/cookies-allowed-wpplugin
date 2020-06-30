@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 3.0.0
+Version: 3.0.1
 Author: Pepijn Nichting | G R A V I T Y
 Text Domain: cookies-allowed
 Domain Path: /languages
@@ -19,7 +19,7 @@ if (!class_exists('CookiesAllowed')) {
             }
             // Set Plugin Path
             $this->pluginPath = dirname(__FILE__);
-            $path_array = explode('/wp-content/', $this->pluginPath);
+            $path_array = explode(WP_CONTENT_DIR, $this->pluginPath);
             $this->pluginRelPath = end($path_array);
 
             // Set Plugin URL
