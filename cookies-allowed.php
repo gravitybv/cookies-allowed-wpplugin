@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookies Allowed
 Description: Add front-end cookie notification bar, front-end cookie settings pannel, back-end Cookie management, back-end scripts manager page
-Version: 3.0.2
+Version: 3.0.3
 Author: Pepijn Nichting | G R A V I T Y
 Text Domain: cookies-allowed
 Domain Path: /languages
@@ -253,13 +253,21 @@ if (!class_exists('CookiesAllowed')) {
                 return;
             } elseif (current_user_can('manage_options') /* && $installing == true  */) {
                 $current_request = add_query_arg($_GET, $wp->request);
-                $plugin_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=acf-code-field'), 'install-plugin_acf-code-field');
-                //$installing = (isset($current_request) && strpos($plugin_install_url, $current_request) == true ) ? true : false; // needs work......
+                $acf_code_field_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=acf-code-field'), 'install-plugin_acf-code-field');
+                $acf_options_for_polylang_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=acf-options-for-polylang'), 'install-plugin_acf-options-for-polylang');
+                //$installing = (isset($current_request) && strpos($acf_code_field_install_url, $current_request) == true ) ? true : false; // needs work......
                 //print_r($plugin_install_url);
                 ?>
                 <div class="notice notice-warning">
                     <h3><?php esc_html_e('Cookies Allowed plugin', 'cookies-allowed'); ?></h3>
-                    <p><?php _e('<a href="' . $plugin_install_url . '">Installeer acf-code-field</a>, dit is nodig om de cookies allowed backend te laten werken', 'cookies-allowed'); ?></p>
+
+                    <?php if ( class_exists('acf_code_field') || class_exists('acf_code_field_v4') ) : ?>
+                    <p><?php _e('<a href="' . $acf_code_field_install_url . '">Installeer acf-code-field</a>, dit is nodig om de cookies allowed backend te laten werken', 'cookies-allowed'); ?></p>
+                    <?php endif; ?>
+
+                    <?php if ( function_exists('pll_the_languages') ) : ?>
+                    <p><?php _e('<a href="' . $acf_options_for_polylang_install_url . '">Installeer acf-options-for-polylang</a>, Omdat je Polylang gebruikt wil je deze plugin gebruiken voor de meertaligheid van de cookie melding', 'cookies-allowed'); ?></p>
+                    <?php endif; ?>
                 </div>
                 <?php
             }
@@ -300,9 +308,9 @@ if (!class_exists('CookiesAllowed')) {
             if (function_exists('acf_add_options_page')) {
                 //wp_die( 'pffffff!' );
                 $language_suffix = null;
-                if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
-                    $language_suffix = '_' . ICL_LANGUAGE_CODE;
-                }
+//                if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
+//                    $language_suffix = '_' . ICL_LANGUAGE_CODE;
+//                }
 
                 acf_add_options_page([
                     'page_title' => 'Cookie Opties',
@@ -326,9 +334,11 @@ if (!class_exists('CookiesAllowed')) {
             $html = '';
             ob_start();
 
-            if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
-                $language_suffix = '_' . ICL_LANGUAGE_CODE;
-            }
+            $language_suffix = null;
+
+//            if (defined('ICL_LANGUAGE_CODE') && function_exists('pll_default_language') && ICL_LANGUAGE_CODE != pll_default_language()) {
+//                $language_suffix = '_' . ICL_LANGUAGE_CODE;
+//            }
 
             $post_id = 'options' . $language_suffix;
 
@@ -380,7 +390,7 @@ if (!class_exists('CookiesAllowed')) {
                                 <button class="cookie__button cookie__button--opacity"
                                         onclick="allowCookies(<?php echo $highest_cookie_allowed_level ?>);"><?php esc_html_e('Allow cookies', 'cookies-allowed'); ?></button>
                                 <?php if ($this->get_cookies_allowed_level() < 1): ?>
-                                    <button class="cookie__button"
+                                    <button class="cookie__button cookie__button--settings"
                                             onclick="toggleCookieModal();"><?php esc_html_e('Settings', 'cookies-allowed'); ?></button>
                                 <?php endif; ?>
                             </div>
